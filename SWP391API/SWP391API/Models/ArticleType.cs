@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace SWP391API.Models
 {
     public partial class ArticleType
@@ -11,7 +13,7 @@ namespace SWP391API.Models
         }
 
         public int ArticleTypeId { get; set; }
-        public string? ArticleTypeName { get; set; }
+        public string ArticleTypeName { get; set; }
 
         public virtual ICollection<Article> Articles { get; set; }
     }

@@ -71,5 +71,12 @@ namespace SWP391API.Controllers
 
             return Ok(new ProductResponse(product));
         }
+
+        [HttpGet("GetListStyle")]
+        public IActionResult GetListStyle()
+        {
+            List<Style> lis = _context.Styles.ToList();
+            return Ok(lis);
+        }
     }
 }

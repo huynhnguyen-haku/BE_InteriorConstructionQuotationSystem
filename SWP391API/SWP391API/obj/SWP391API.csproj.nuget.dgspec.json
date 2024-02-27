@@ -1,20 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Huynh Nguyen\\Documents\\SWP391API\\SWP391API\\SWP391API\\SWP391API.csproj": {}
+    "D:\\SWPdoc\\SWP391API\\SWP391API\\SWP391API\\SWP391API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Huynh Nguyen\\Documents\\SWP391API\\SWP391API\\SWP391API\\SWP391API.csproj": {
+    "D:\\SWPdoc\\SWP391API\\SWP391API\\SWP391API\\SWP391API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Huynh Nguyen\\Documents\\SWP391API\\SWP391API\\SWP391API\\SWP391API.csproj",
+        "projectUniqueName": "D:\\SWPdoc\\SWP391API\\SWP391API\\SWP391API\\SWP391API.csproj",
         "projectName": "SWP391API",
-        "projectPath": "C:\\Users\\Huynh Nguyen\\Documents\\SWP391API\\SWP391API\\SWP391API\\SWP391API.csproj",
-        "packagesPath": "C:\\Users\\Huynh Nguyen\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Huynh Nguyen\\Documents\\SWP391API\\SWP391API\\SWP391API\\obj\\",
+        "projectPath": "D:\\SWPdoc\\SWP391API\\SWP391API\\SWP391API\\SWP391API.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "D:\\SWPdoc\\SWP391API\\SWP391API\\SWP391API\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Huynh Nguyen\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +25,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "D:\\nutget": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -86,7 +90,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }
