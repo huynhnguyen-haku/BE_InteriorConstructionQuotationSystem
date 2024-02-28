@@ -15,7 +15,6 @@ namespace SWP391API.Models
         public int ProjectId { get; set; }
         public int StyleId { get; set; }
         public int UserId { get; set; }
-        public int ProductId { get; set; }
         public string ProjectTitle { get; set; }
         public string ProjectDescription { get; set; }
         public string ProjectImage { get; set; }

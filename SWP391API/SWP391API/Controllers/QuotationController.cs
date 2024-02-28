@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SWP391API.DTO;
 using SWP391API.Models;
+using System.Security.Claims;
 
 namespace SWP391API.Controllers
 {
@@ -13,11 +16,16 @@ namespace SWP391API.Controllers
         private readonly InteriorConstructionQuotationSystemContext _context = new InteriorConstructionQuotationSystemContext();
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult GetQuotationTemps()
         {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IList<Claim> claim = identity.Claims.ToList();
+            var userId = claim[1].Value;
+            int uID = int.Parse(userId);
             List<QuotationTemp> quotationTemps = _context.QuotationTemps
             .Include(qt => qt.Product)
-            .Include(qt => qt.User)
+            .Include(qt => qt.User).Where(x=>x.UserId == uID)
             .ToList();
             List<QuotationTempsResponse> responses = new List<QuotationTempsResponse>();
 
@@ -28,18 +36,21 @@ namespace SWP391API.Controllers
             return Ok(responses);
         }
 
-      
-
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult AddQuotationTemp(QuotationTempRequest quotationTemp)
         {
-            QuotationTemp checkExist = _context.QuotationTemps.FirstOrDefault(qt => qt.UserId == quotationTemp.UserId && qt.ProductId == quotationTemp.ProductId);
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IList<Claim> claim = identity.Claims.ToList();
+            var userIdValue = claim[1].Value;
+            int userId = int.Parse(userIdValue);
+            QuotationTemp checkExist = _context.QuotationTemps.FirstOrDefault(qt => qt.UserId == userId && qt.ProductId == quotationTemp.ProductId);
             if (checkExist == null)
             {
                 QuotationTemp quotation = new QuotationTemp();
                 quotation.ProductId = quotationTemp.ProductId;
                 quotation.Quantity = quotationTemp.Quantity;
-                quotation.UserId = quotationTemp.UserId;
+                quotation.UserId = userId;
 
                 _context.QuotationTemps.Add(quotation);
                 _context.SaveChanges();
@@ -56,20 +67,31 @@ namespace SWP391API.Controllers
         }
 
         [HttpPut]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult UpdateQuotationTemp(QuotationTempRequest quotationTemp)
         {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IList<Claim> claim = identity.Claims.ToList();
+            var userIdValue = claim[1].Value;
+            int userId = int.Parse(userIdValue);
+
             QuotationTemp quotation = new QuotationTemp();
             quotation.ProductId = quotationTemp.ProductId;
             quotation.Quantity = quotationTemp.Quantity;
-            quotation.UserId = quotationTemp.UserId;
+            quotation.UserId = userId;
             _context.QuotationTemps.Update(quotation);
             _context.SaveChanges();
             return Ok();
         }
 
         [HttpDelete("{userId}/{productId}")]
-        public IActionResult DeleteQuotationTemp(int userId, int productId)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public IActionResult DeleteQuotationTemp( int productId)
         {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IList<Claim> claim = identity.Claims.ToList();
+            var userIdValue = claim[1].Value;
+            int userId = int.Parse(userIdValue);
             var quotationTemp = _context.QuotationTemps.FirstOrDefault(qt => qt.UserId == userId && qt.ProductId == productId);
 
             if (quotationTemp != null)
