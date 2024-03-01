@@ -13,7 +13,7 @@ namespace SWP391API.Models
         public string Content { get; set; }
         public int ArticleTypeId { get; set; }
         public DateTime CreatedAt { get; set; }
-
+        public bool? Status { get; set; }
         public virtual ArticleType ArticleType { get; set; }
         public virtual User User { get; set; }
     }

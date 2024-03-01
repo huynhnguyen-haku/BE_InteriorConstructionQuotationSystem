@@ -15,6 +15,7 @@ namespace SWP391API.DTO
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public string CategoryName { get; set; } = null!;
+        public bool? Status { get; set; }
 
         public ProductResponse(Product p)
         {
@@ -29,6 +30,7 @@ namespace SWP391API.DTO
             CreatedAt = p.CreatedAt;
             UpdatedAt = p.UpdatedAt;
             CategoryName = p.Category.Name;
+            Status = p.Status;
         }
     }
 }

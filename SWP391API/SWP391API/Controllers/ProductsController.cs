@@ -12,6 +12,7 @@ namespace SWP391API.Controllers
     {
         private readonly InteriorConstructionQuotationSystemContext _context = new InteriorConstructionQuotationSystemContext();
 
+
         [HttpGet]
         public IActionResult GetListProducts([FromQuery] int page = 1, [FromQuery] int pageSize = 10,[FromQuery] string? searchName = null, [FromQuery] int? categoryId = null,
         [FromQuery] decimal? minPrice = null, [FromQuery] decimal? maxPrice = null, [FromQuery] bool sortByDateDescending = true)
@@ -77,6 +78,70 @@ namespace SWP391API.Controllers
         {
             List<Style> lis = _context.Styles.ToList();
             return Ok(lis);
+        }
+
+
+        [HttpPost]
+        public IActionResult AddProduct(ProductRequest product)
+        {
+            Product p = new Product();
+            p.ProductId = 0;
+            p.CategoryId = product.CategoryId;
+            p.UserId = product.UserId;
+            p.Name = product.Name;
+            p.Price = product.Price;
+            p.Description = product.Description;
+            p.Size = product.Size;
+            p.Status = product.Status;
+            p.ImageUrl = product.ImageUrl;
+            p.CreatedAt = DateTime.Now;
+            _context.Products.Add(p);
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpPut]
+        public IActionResult UpdateProduct(ProductRequest product)
+        {
+            Product p = _context.Products.FirstOrDefault(x => x.ProductId == product.ProductId);
+            if (p == null)
+            {
+                return Ok("This Product not exist try again!");
+             }
+            p.CategoryId = product.CategoryId;
+            p.UserId = product.UserId;
+            p.Name = product.Name;
+            p.Price = product.Price;
+            p.Description = product.Description;
+            p.Size = product.Size;
+            p.ImageUrl = product.ImageUrl;
+            p.CreatedAt = DateTime.Now;
+            p.Status = product.Status;
+
+            _context.Products.Update(p);
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteProduct(int id)
+        {
+            var product = _context.Products.FirstOrDefault(p => p.ProductId == id);
+
+            if (product != null)
+            {
+                _context.Products.Remove(product);
+                _context.SaveChanges();
+                return Ok();
+
+            }
+            else
+            {
+                return Ok("This Product not exist try again!");
+            }
+
         }
     }
 }

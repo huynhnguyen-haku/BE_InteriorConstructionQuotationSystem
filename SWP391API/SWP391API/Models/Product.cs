@@ -22,8 +22,10 @@ namespace SWP391API.Models
         public string Description { get; set; }
         public string Size { get; set; }
         public string ImageUrl { get; set; }
+        public bool? Status { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+
 
         public virtual Category Category { get; set; }
         public virtual User User { get; set; }

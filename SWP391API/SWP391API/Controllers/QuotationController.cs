@@ -43,6 +43,11 @@ namespace SWP391API.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IList<Claim> claim = identity.Claims.ToList();
             var userIdValue = claim[1].Value;
+            var product = _context.Products.FirstOrDefault(x => x.ProductId == quotationTemp.ProductId);
+            if (product == null)
+            {
+                return Ok("Product Id not exist. Try Again!");
+            }
             int userId = int.Parse(userIdValue);
             QuotationTemp checkExist = _context.QuotationTemps.FirstOrDefault(qt => qt.UserId == userId && qt.ProductId == quotationTemp.ProductId);
             if (checkExist == null)
@@ -70,6 +75,11 @@ namespace SWP391API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult UpdateQuotationTemp(QuotationTempRequest quotationTemp)
         {
+            var product = _context.Products.FirstOrDefault(x => x.ProductId == quotationTemp.ProductId);
+            if (product == null)
+            {
+                return Ok("Product Id not exist. Try Again!");
+            }
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IList<Claim> claim = identity.Claims.ToList();
             var userIdValue = claim[1].Value;
@@ -98,8 +108,14 @@ namespace SWP391API.Controllers
             {
                 _context.QuotationTemps.Remove(quotationTemp);
                 _context.SaveChanges();
+                return Ok();
+
             }
-            return Ok();
+            else
+            {
+                return Ok("Product not exist in quotation of this user . Try Again!");
+
+            }
         }
 
     }

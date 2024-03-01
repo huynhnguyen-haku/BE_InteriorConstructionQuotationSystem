@@ -12,7 +12,7 @@ namespace SWP391API.DTO
         public DateTime CreatedAt { get; set; }
         public string? ArticleTypeName { get; set; }
         public string? AuthorName { get; set; }
-
+        public bool? Status { get; set; }
         public ArticleResponse(Article a)
         {
             ArticleId = a.ArticleId;
@@ -23,6 +23,7 @@ namespace SWP391API.DTO
             CreatedAt = a.CreatedAt;
             ArticleTypeName = a.ArticleType.ArticleTypeName;
             AuthorName = a.User.Username;
+            Status = a.Status;
         }
     }
 }

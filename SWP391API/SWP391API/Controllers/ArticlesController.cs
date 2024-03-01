@@ -14,7 +14,6 @@ namespace SWP391API.Controllers
     {
         private readonly InteriorConstructionQuotationSystemContext _context = new InteriorConstructionQuotationSystemContext();
 
-
         [HttpGet]
         public IActionResult GetListArticle([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchTitle = null, [FromQuery] int? articleTypeId = null, [FromQuery] bool sortByDateDescending = true)
         {
@@ -25,6 +24,7 @@ namespace SWP391API.Controllers
             {
                 query = query.Where(a => a.Title.Contains(searchTitle));
             }
+
 
             if (articleTypeId.HasValue)
             {
@@ -61,6 +61,65 @@ namespace SWP391API.Controllers
                 return NotFound();
             ArticleResponse articleResponse = new ArticleResponse(article);
             return Ok(articleResponse);
+        }
+
+
+        [HttpPost]
+        public IActionResult AddArticle(ArticleRequest article)
+        {
+            Article a = new Article();
+            a.ArticleId = 0;
+            a.ArticleTypeId = article.ArticleTypeId;
+            a.UserId = article.UserId;
+            a.Title = article.Title;
+            a.Content = article.Content;
+            a.Status = article.Status;
+
+            _context.Articles.Add(a);
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPut]
+        public IActionResult UpdateArticle(ArticleRequest article)
+        {
+            Article a = _context.Articles.FirstOrDefault(a => a.ArticleId == article.ArticleId);
+           
+            if (a != null)
+            {
+                a.ArticleTypeId = article.ArticleTypeId;
+                a.UserId = article.UserId;
+                a.Title = article.Title;
+                a.Content = article.Content;
+                a.Status = article.Status;
+                _context.Articles.Update(a);
+                _context.SaveChanges();
+                return Ok();
+            }
+            else
+            {
+                return Ok("This Article isn't exist. Try again!");    
+            }
+
+           
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteArticle(int id)
+        {
+            var article = _context.Articles.FirstOrDefault(a => a.ArticleId == id);
+
+            if (article != null)
+            {
+                _context.Articles.Remove(article);
+                _context.SaveChanges();
+                return Ok();
+            }
+            else
+            {
+                return Ok("This id of Article isn't exist. Try again!");
+            }
+
         }
     }
 }
