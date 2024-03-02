@@ -18,37 +18,53 @@ namespace SWP391API.Controllers
        [FromQuery] int pageSize = 10,
        [FromQuery] string? searchTerm = null)
         {
-            var query = _context.Users.AsQueryable();
-            searchTerm = searchTerm==null ? "": searchTerm;
-            // Apply search filter
-            if (!string.IsNullOrEmpty(searchTerm))
+            try
             {
-                query = query.Where(u =>
-                    u.Fullname.Contains(searchTerm) ||
-                    u.Email.Contains(searchTerm) ||
-                    u.Username.Contains(searchTerm));
-            }
+                var query = _context.Users.AsQueryable();
+                searchTerm = searchTerm == null ? "" : searchTerm;
+                // Apply search filter
+
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    query = query.Where(u =>
+                        u.Fullname.Contains(searchTerm) ||
+                        u.Email.Contains(searchTerm) ||
+                        u.Username.Contains(searchTerm));
+                }
 
                 var totalCount = query.Count();
 
-            var users = query
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
+                var users = query
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
 
-            return Ok(new { Users = users, TotalCount = totalCount });
+                return Ok(new { Users = users, TotalCount = totalCount });
+
+            }
+            catch(Exception e)
+            {
+                return Ok(e);
+            }
+            
         }
 
         [HttpGet("{userId}")]
         public IActionResult GetUserById(int userId)
         {
+            try { 
             var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
 
             if (user == null)
                 return Ok("This user isn't exist. Try again!");
 
             return Ok(user);
-        }
+             }
+            catch(Exception e)
+            {
+                return Ok(e);
+            }
+         }
 
         [HttpPost]
         public IActionResult AddUser(AddUserDTO addUserDTO)

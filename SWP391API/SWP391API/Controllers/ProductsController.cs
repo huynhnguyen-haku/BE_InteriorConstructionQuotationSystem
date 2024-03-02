@@ -17,46 +17,51 @@ namespace SWP391API.Controllers
         public IActionResult GetListProducts([FromQuery] int page = 1, [FromQuery] int pageSize = 10,[FromQuery] string? searchName = null, [FromQuery] int? categoryId = null,
         [FromQuery] decimal? minPrice = null, [FromQuery] decimal? maxPrice = null, [FromQuery] bool sortByDateDescending = true)
         {
-            var query = _context.Products
-            .Include(p => p.Category)
-            .AsQueryable();
+            try {
+                var query = _context.Products
+                .Include(p => p.Category)
+                .AsQueryable();
 
-            if (!string.IsNullOrEmpty(searchName))
+                if (!string.IsNullOrEmpty(searchName))
+                {
+                    query = query.Where(p => p.Name.Contains(searchName));
+                }
+
+                if (categoryId.HasValue)
+                {
+                    query = query.Where(p => p.CategoryId == categoryId.Value);
+                }
+
+                if (minPrice.HasValue)
+                {
+                    query = query.Where(p => p.Price >= minPrice.Value);
+                }
+
+                if (maxPrice.HasValue)
+                {
+                    query = query.Where(p => p.Price <= maxPrice.Value);
+                }
+                query = sortByDateDescending
+                    ? query.OrderByDescending(p => p.CreatedAt)
+                    : query.OrderBy(p => p.CreatedAt);
+
+                var totalCount = query.Count();
+                List<Product> products = query
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+                List<ProductResponse> responses = new List<ProductResponse>();
+                foreach (var product in products)
+                {
+                    responses.Add(new ProductResponse(product));
+                }
+                var obj = new { responses, totalCount };
+                return Ok(obj);
+                }
+            catch (Exception e)
             {
-                query = query.Where(p => p.Name.Contains(searchName));
+                return Ok(e);
             }
-
-            if (categoryId.HasValue)
-            {
-                query = query.Where(p => p.CategoryId == categoryId.Value);
-            }
-
-            if (minPrice.HasValue)
-            {
-                query = query.Where(p => p.Price >= minPrice.Value);
-            }
-
-            if (maxPrice.HasValue)
-            {
-                query = query.Where(p => p.Price <= maxPrice.Value);
-            }
-
-            query = sortByDateDescending
-                ? query.OrderByDescending(p => p.CreatedAt)
-                : query.OrderBy(p => p.CreatedAt);
-
-            var totalCount = query.Count();
-            List<Product> products = query
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-            List<ProductResponse> responses = new List<ProductResponse>();
-            foreach (var product in products)
-            {
-                responses.Add(new ProductResponse(product));
-            }
-            var obj = new { responses, totalCount };
-            return Ok(obj);
         }
 
         [HttpGet("{id}")]

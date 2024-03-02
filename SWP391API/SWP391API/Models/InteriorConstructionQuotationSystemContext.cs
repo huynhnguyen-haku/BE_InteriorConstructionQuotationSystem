@@ -42,6 +42,7 @@ namespace SWP391API.Models
                 .AddJsonFile("appsettings.json", true, true)
                 .Build();
             var strConn = config.GetConnectionString("DefaultConnection");
+
             return strConn;
         }
 

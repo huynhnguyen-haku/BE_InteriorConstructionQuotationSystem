@@ -17,6 +17,7 @@ namespace SWP391API.Controllers
         [HttpGet]
         public IActionResult GetListArticle([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchTitle = null, [FromQuery] int? articleTypeId = null, [FromQuery] bool sortByDateDescending = true)
         {
+            try { 
             var query = _context.Articles.Include(a => a.ArticleType).Include(a => a.User)
            .AsQueryable();
 
@@ -47,6 +48,11 @@ namespace SWP391API.Controllers
             }
             var output = new { responses, totalCount };  
             return Ok(output);
+            }
+            catch (Exception e)
+            {
+                return Ok(e);
+            }
         }
 
         [HttpGet("{id}")]

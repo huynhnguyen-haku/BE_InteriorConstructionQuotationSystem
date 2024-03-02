@@ -21,6 +21,7 @@ namespace SWP391API.Controllers
         [HttpPost("register")]
         public IActionResult Register(UserRegisterDTO userdto)
         {
+            
             User user = new User();
             user.Username = userdto.Username;
             user.Password = userdto.Password;
@@ -37,12 +38,19 @@ namespace SWP391API.Controllers
         [HttpPost("login")]
         public IActionResult Login(UserDTO userDTO)
         {
-            var user = _context.Users.Include(x=>x.Role).SingleOrDefault(x => x.Username == userDTO.Username && x.Password == userDTO.Password);
-            if (user == null)
+            try
             {
-                return BadRequest(new { message = "Username or password is incorrect" });
+                var user = _context.Users.Include(x => x.Role).SingleOrDefault(x => x.Username == userDTO.Username && x.Password == userDTO.Password);
+                if (user == null)
+                {
+                    return BadRequest(new { message = "Username or password is incorrect" });
+                }
+                return Ok(new { token = CreateToken(user) });
             }
-            return Ok(new { token = CreateToken(user) });
+            catch (Exception e)
+            {
+                return Ok(e);
+            }
         }
 
         private string CreateToken(User user)
