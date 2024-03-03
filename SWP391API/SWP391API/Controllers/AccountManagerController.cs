@@ -10,7 +10,12 @@ namespace SWP391API.Controllers
     [ApiController]
     public class AccountManagerController : ControllerBase
     {
-        private readonly InteriorConstructionQuotationSystemContext _context = new InteriorConstructionQuotationSystemContext();
+        private readonly InteriorConstructionQuotationSystemContext _context;
+
+        public AccountManagerController(InteriorConstructionQuotationSystemContext context)
+        {
+            _context = context;
+        }
 
         [HttpGet]
         public IActionResult GetUsers(
@@ -23,6 +28,7 @@ namespace SWP391API.Controllers
                 var query = _context.Users.AsQueryable();
                 searchTerm = searchTerm == null ? "" : searchTerm;
                 // Apply search filter
+
 
                 if (!string.IsNullOrEmpty(searchTerm))
                 {
@@ -44,9 +50,13 @@ namespace SWP391API.Controllers
             }
             catch(Exception e)
             {
-                return Ok(e);
+                return BadRequest("Có lỗi xảy ra: " + e.Message);
             }
-            
+            finally
+            {
+                _context.Dispose(); // Giải phóng tài nguyên
+            }
+
         }
 
         [HttpGet("{userId}")]

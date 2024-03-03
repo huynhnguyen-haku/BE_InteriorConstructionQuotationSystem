@@ -2,10 +2,15 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SWP391API.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
+{
+    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
+});
 
 if (!builder.Environment.IsDevelopment())
 {
@@ -17,6 +22,7 @@ if (!builder.Environment.IsDevelopment())
 
 // Add services to the container.
 
+builder.Services.AddScoped<InteriorConstructionQuotationSystemContext>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
