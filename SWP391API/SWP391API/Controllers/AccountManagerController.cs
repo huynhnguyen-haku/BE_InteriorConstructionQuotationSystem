@@ -48,7 +48,7 @@ namespace SWP391API.Controllers
                 return Ok(new { Users = users, TotalCount = totalCount });
 
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return BadRequest("Có lỗi xảy ra: " + e.Message);
             }
@@ -62,19 +62,20 @@ namespace SWP391API.Controllers
         [HttpGet("{userId}")]
         public IActionResult GetUserById(int userId)
         {
-            try { 
-            var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
-
-            if (user == null)
-                return Ok("This user isn't exist. Try again!");
-
-            return Ok(user);
-             }
-            catch(Exception e)
+            try
             {
-                return Ok(e);
+                var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+
+                if (user == null)
+                    return Ok("This user isn't exist. Try again!");
+                _context.Dispose(); // Giải phóng tài nguyên
+                return Ok(user);
             }
-         }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
         [HttpPost]
         public IActionResult AddUser(AddUserDTO addUserDTO)
@@ -94,7 +95,7 @@ namespace SWP391API.Controllers
 
             _context.Users.Add(newUser);
             _context.SaveChanges();
-
+            _context.Dispose(); // Giải phóng tài nguyên
             return Ok();
         }
 
@@ -114,7 +115,7 @@ namespace SWP391API.Controllers
             user.RoleId = updateUserDTO.RoleId;
             user.Status = updateUserDTO.Status;
             _context.SaveChanges();
-
+            _context.Dispose(); // Giải phóng tài nguyên
             return Ok();
         }
 
@@ -128,7 +129,7 @@ namespace SWP391API.Controllers
 
             _context.Users.Remove(user);
             _context.SaveChanges();
-
+            _context.Dispose(); // Giải phóng tài nguyên
             return Ok();
         }
     }

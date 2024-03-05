@@ -10,8 +10,12 @@ namespace SWP391API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly InteriorConstructionQuotationSystemContext _context = new InteriorConstructionQuotationSystemContext();
+        private readonly InteriorConstructionQuotationSystemContext _context;
 
+        public ProductsController(InteriorConstructionQuotationSystemContext context)
+        {
+            _context = context;
+        }
 
         [HttpGet]
         public IActionResult GetListProducts([FromQuery] int page = 1, [FromQuery] int pageSize = 10,[FromQuery] string? searchName = null, [FromQuery] int? categoryId = null,
@@ -56,11 +60,12 @@ namespace SWP391API.Controllers
                     responses.Add(new ProductResponse(product));
                 }
                 var obj = new { responses, totalCount };
+                _context.Dispose(); // Giải phóng tài nguyên
                 return Ok(obj);
                 }
             catch (Exception e)
             {
-                return Ok(e);
+                return BadRequest(e.Message);
             }
         }
 
@@ -74,7 +79,7 @@ namespace SWP391API.Controllers
 
             if (product == null)
                 return NotFound();
-
+            _context.Dispose(); // Giải phóng tài nguyên
             return Ok(new ProductResponse(product));
         }
 
@@ -82,6 +87,7 @@ namespace SWP391API.Controllers
         public IActionResult GetListStyle()
         {
             List<Style> lis = _context.Styles.ToList();
+            _context.Dispose(); // Giải phóng tài nguyên
             return Ok(lis);
         }
 
@@ -102,7 +108,7 @@ namespace SWP391API.Controllers
             p.CreatedAt = DateTime.Now;
             _context.Products.Add(p);
             _context.SaveChanges();
-
+            _context.Dispose(); // Giải phóng tài nguyên
             return Ok();
         }
 
@@ -126,7 +132,7 @@ namespace SWP391API.Controllers
 
             _context.Products.Update(p);
             _context.SaveChanges();
-
+            _context.Dispose(); // Giải phóng tài nguyên
             return Ok();
         }
 
@@ -139,6 +145,7 @@ namespace SWP391API.Controllers
             {
                 _context.Products.Remove(product);
                 _context.SaveChanges();
+                _context.Dispose(); // Giải phóng tài nguyên
                 return Ok();
 
             }

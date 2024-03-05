@@ -16,23 +16,39 @@ namespace SWP391API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly InteriorConstructionQuotationSystemContext _context = new InteriorConstructionQuotationSystemContext();
+        private readonly InteriorConstructionQuotationSystemContext _context;
+
+        public UserController(InteriorConstructionQuotationSystemContext context)
+        {
+            _context = context;
+        }
 
         [HttpPost("register")]
         public IActionResult Register(UserRegisterDTO userdto)
         {
-            
-            User user = new User();
-            user.Username = userdto.Username;
-            user.Password = userdto.Password;
-            user.Email = userdto.Email;
-            user.Birthdate = userdto.Birthdate;
-            user.Fullname = userdto.Fullname;
-            user.RoleId = userdto.RoleId;
-            user.PhoneNumber = userdto.PhoneNumber;
-            _context.Users.Add(user);
-            _context.SaveChanges();
-            return Ok(new { message = "Register successfully" });
+            try
+            {
+                User user = new User();
+                user.Username = userdto.Username;
+                user.Password = userdto.Password;
+                user.Email = userdto.Email;
+                user.Birthdate = userdto.Birthdate;
+                user.Fullname = userdto.Fullname;
+                user.RoleId = userdto.RoleId;
+                user.PhoneNumber = userdto.PhoneNumber;
+                _context.Users.Add(user);
+                _context.SaveChanges();
+
+                return Ok(new { message = "Register successfully" });
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Có lỗi xảy ra: " + e.Message);
+            }
+            finally
+            {
+                _context.Dispose(); // Giải phóng tài nguyên
+            }
         }
 
         [HttpPost("login")]
@@ -49,7 +65,11 @@ namespace SWP391API.Controllers
             }
             catch (Exception e)
             {
-                return Ok(e);
+                return BadRequest("Có lỗi xảy ra: " + e.Message);
+            }
+            finally
+            {
+                _context.Dispose(); // Giải phóng tài nguyên
             }
         }
 
@@ -72,6 +92,7 @@ namespace SWP391API.Controllers
             user.ExpireDate = DateTime.Now.AddMinutes(30);
             _context.Update(user);
             _context.SaveChanges();
+
             return jwt;
         }
 
@@ -88,8 +109,10 @@ namespace SWP391API.Controllers
             var avtURL = claim[3].Value;
             var role = claim[4].Value;
             User u = _context.Users.FirstOrDefault(x => x.UserId == int.Parse(userId));
+            _context.Dispose(); // Giải phóng tài nguyên
+
             return Ok(u);
         }
-        
+
     }
 }

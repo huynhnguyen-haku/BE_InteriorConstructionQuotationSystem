@@ -11,7 +11,12 @@ namespace SWP391API.Controllers
     [ApiController]
     public class ProjectsController : ControllerBase
     {
-        private readonly InteriorConstructionQuotationSystemContext _context = new InteriorConstructionQuotationSystemContext();
+        private readonly InteriorConstructionQuotationSystemContext _context;
+
+        public ProjectsController(InteriorConstructionQuotationSystemContext context)
+        {
+            _context = context;
+        }
 
         [HttpGet]
         public IActionResult GetListProducts([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchName = null,[FromQuery] bool sortByDateDescending = true)
@@ -35,6 +40,7 @@ namespace SWP391API.Controllers
                 .Take(pageSize)
                 .ToList();
             var obj = new { products, totalCount };
+            _context.Dispose(); // Giải phóng tài nguyên
             return Ok(obj);
         }
 
@@ -54,7 +60,7 @@ namespace SWP391API.Controllers
             if (project == null)
                 return NotFound();
             ProjectResponse response = new ProjectResponse(project, pl);
-
+            _context.Dispose(); // Giải phóng tài nguyên
             return Ok(response);
         }
 

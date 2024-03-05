@@ -12,46 +12,53 @@ namespace SWP391API.Controllers
     [ApiController]
     public class ArticlesController : ControllerBase
     {
-        private readonly InteriorConstructionQuotationSystemContext _context = new InteriorConstructionQuotationSystemContext();
+        private readonly InteriorConstructionQuotationSystemContext _context;
+
+        public ArticlesController(InteriorConstructionQuotationSystemContext context)
+        {
+            _context = context;
+        }
 
         [HttpGet]
         public IActionResult GetListArticle([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchTitle = null, [FromQuery] int? articleTypeId = null, [FromQuery] bool sortByDateDescending = true)
         {
-            try { 
-            var query = _context.Articles.Include(a => a.ArticleType).Include(a => a.User)
-           .AsQueryable();
-
-            if (!string.IsNullOrEmpty(searchTitle))
+            try
             {
-                query = query.Where(a => a.Title.Contains(searchTitle));
-            }
+                var query = _context.Articles.Include(a => a.ArticleType).Include(a => a.User)
+               .AsQueryable();
+
+                if (!string.IsNullOrEmpty(searchTitle))
+                {
+                    query = query.Where(a => a.Title.Contains(searchTitle));
+                }
 
 
-            if (articleTypeId.HasValue)
-            {
-                query = query.Where(a => a.ArticleTypeId == articleTypeId.Value);
-            }
+                if (articleTypeId.HasValue)
+                {
+                    query = query.Where(a => a.ArticleTypeId == articleTypeId.Value);
+                }
 
-            query = sortByDateDescending
-            ? query.OrderByDescending(a => a.CreatedAt)
-            : query.OrderBy(a => a.CreatedAt);
-            var totalCount = query.Count();
+                query = sortByDateDescending
+                ? query.OrderByDescending(a => a.CreatedAt)
+                : query.OrderBy(a => a.CreatedAt);
+                var totalCount = query.Count();
 
-            List<Article>  articles = query
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-            List<ArticleResponse> responses = new List<ArticleResponse>();
-            foreach (var article in articles)
-            {
-                responses.Add(new ArticleResponse(article));
-            }
-            var output = new { responses, totalCount };  
-            return Ok(output);
+                List<Article> articles = query
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+                List<ArticleResponse> responses = new List<ArticleResponse>();
+                foreach (var article in articles)
+                {
+                    responses.Add(new ArticleResponse(article));
+                }
+                var output = new { responses, totalCount };
+                _context.Dispose(); // Giải phóng tài nguyên
+                return Ok(output);
             }
             catch (Exception e)
             {
-                return Ok(e);
+                return BadRequest(e.Message);
             }
         }
 
@@ -66,6 +73,7 @@ namespace SWP391API.Controllers
             if (article == null)
                 return NotFound();
             ArticleResponse articleResponse = new ArticleResponse(article);
+            _context.Dispose(); // Giải phóng tài nguyên
             return Ok(articleResponse);
         }
 
@@ -83,6 +91,7 @@ namespace SWP391API.Controllers
 
             _context.Articles.Add(a);
             _context.SaveChanges();
+            _context.Dispose(); // Giải phóng tài nguyên
             return Ok();
         }
 
@@ -90,7 +99,7 @@ namespace SWP391API.Controllers
         public IActionResult UpdateArticle(ArticleRequest article)
         {
             Article a = _context.Articles.FirstOrDefault(a => a.ArticleId == article.ArticleId);
-           
+
             if (a != null)
             {
                 a.ArticleTypeId = article.ArticleTypeId;
@@ -100,14 +109,15 @@ namespace SWP391API.Controllers
                 a.Status = article.Status;
                 _context.Articles.Update(a);
                 _context.SaveChanges();
+                _context.Dispose(); // Giải phóng tài nguyên
                 return Ok();
             }
             else
             {
-                return Ok("This Article isn't exist. Try again!");    
+                return Ok("This Article isn't exist. Try again!");
             }
 
-           
+
         }
 
         [HttpDelete("{id}")]
@@ -119,6 +129,7 @@ namespace SWP391API.Controllers
             {
                 _context.Articles.Remove(article);
                 _context.SaveChanges();
+                _context.Dispose(); // Giải phóng tài nguyên
                 return Ok();
             }
             else
