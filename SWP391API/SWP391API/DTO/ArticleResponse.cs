@@ -9,6 +9,7 @@ namespace SWP391API.DTO
         public string Title { get; set; } = null!;
         public string? Content { get; set; }
         public int ArticleTypeId { get; set; }
+        public string Img { get; set; }
         public DateTime CreatedAt { get; set; }
         public string? ArticleTypeName { get; set; }
         public string? AuthorName { get; set; }
@@ -24,6 +25,7 @@ namespace SWP391API.DTO
             ArticleTypeName = a.ArticleType.ArticleTypeName;
             AuthorName = a.User.Username;
             Status = a.Status;
+            Img = a.Img;
         }
     }
 }

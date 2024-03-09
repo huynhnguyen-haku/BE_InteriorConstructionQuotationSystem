@@ -165,11 +165,12 @@ namespace SWP391API.Controllers
                 IList<Claim> claim = identity.Claims.ToList();
                 var userIdValue = claim[1].Value;
                 int userId = int.Parse(userIdValue);
-
-                QuotationTemp quotation = new QuotationTemp();
-                quotation.ProductId = quotationTemp.ProductId;
+                QuotationTemp quotation = _context.QuotationTemps.FirstOrDefault(qt => qt.UserId == userId && qt.ProductId == quotationTemp.ProductId);
+                if (quotation == null)
+                {
+                    return Ok("Product Id not exist in quotation of this person. Try Again!");
+                }
                 quotation.Quantity = quotationTemp.Quantity;
-                quotation.UserId = userId;
                 _context.QuotationTemps.Update(quotation);
                 _context.SaveChanges();
                 _context.Dispose(); // Giải phóng tài nguyên
@@ -242,6 +243,38 @@ namespace SWP391API.Controllers
                 if (quotationTemp != null)
                 {
                     _context.QuotationTemps.Remove(quotationTemp);
+                    _context.SaveChanges();
+                    _context.Dispose(); // Giải phóng tài nguyên
+                    return Ok();
+
+                }
+                else
+                {
+                    return Ok("Product not exist in quotation of this user . Try Again!");
+
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("/ClearQuotation")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public IActionResult ClearQuotation(int productId)
+        {
+            try
+            {
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                IList<Claim> claim = identity.Claims.ToList();
+                var userIdValue = claim[1].Value;
+                int userId = int.Parse(userIdValue);
+                List<QuotationTemp> quotationTemps = _context.QuotationTemps.Where(qt => qt.UserId == userId).ToList();
+
+                if (quotationTemps.Count != 0)
+                {
+                    _context.QuotationTemps.RemoveRange(quotationTemps);
                     _context.SaveChanges();
                     _context.Dispose(); // Giải phóng tài nguyên
                     return Ok();

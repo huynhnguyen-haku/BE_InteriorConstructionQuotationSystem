@@ -8,6 +8,7 @@ namespace SWP391API.DTO
         public int UserId { get; set; }
         public string Title { get; set; } = null!;
         public string? Content { get; set; }
+        public string Img { get; set; }
         public int ArticleTypeId { get; set; }
         [JsonIgnore]
         public DateTime CreatedAt { get; set; } = DateTime.Now;

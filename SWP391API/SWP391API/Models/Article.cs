@@ -14,6 +14,7 @@ namespace SWP391API.Models
         public int ArticleTypeId { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool? Status { get; set; }
+        public string Img { get; set; }
         public virtual ArticleType ArticleType { get; set; }
         public virtual User User { get; set; }
     }

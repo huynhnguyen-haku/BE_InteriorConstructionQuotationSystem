@@ -88,7 +88,7 @@ namespace SWP391API.Controllers
             a.Title = article.Title;
             a.Content = article.Content;
             a.Status = article.Status;
-
+            a.Img = article.Img;
             _context.Articles.Add(a);
             _context.SaveChanges();
             _context.Dispose(); // Giải phóng tài nguyên
@@ -107,6 +107,7 @@ namespace SWP391API.Controllers
                 a.Title = article.Title;
                 a.Content = article.Content;
                 a.Status = article.Status;
+                a.Img = article.Img;
                 _context.Articles.Update(a);
                 _context.SaveChanges();
                 _context.Dispose(); // Giải phóng tài nguyên
