@@ -63,7 +63,31 @@ namespace SWP391API.Controllers
                 IList<Claim> claim = identity.Claims.ToList();
                 var userId = claim[1].Value;
                 int uID = int.Parse(userId);
-                var responses = _context.Quotations.Include(x=>x.Style).Where(x => x.UserId == uID).ToList();
+                var responses = _context.Quotations.Include(x => x.Style).Where(x => x.UserId == uID).ToList();
+                return Ok(responses);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Có lỗi xảy ra: " + e.Message);
+            }
+            finally
+            {
+                _context.Dispose(); // Giải phóng tài nguyên
+            }
+
+        }
+
+        [HttpGet("GetAllSubmitedQuotations")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public IActionResult GetAllSubmitedQuotations()
+        {
+            try
+            {
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                IList<Claim> claim = identity.Claims.ToList();
+                var userId = claim[1].Value;
+                int uID = int.Parse(userId);
+                var responses = _context.Quotations.Include(x=>x.Style).Include(x => x.User).ToList();
                 return Ok(responses);
             }
             catch (Exception e)

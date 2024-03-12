@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SWP391API.DTO;
 using SWP391API.Models;
+using System.Security.Claims;
 
 namespace SWP391API.Controllers
 {
@@ -18,11 +21,20 @@ namespace SWP391API.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult GetUsers(
        [FromQuery] int page = 1,
        [FromQuery] int pageSize = 10,
        [FromQuery] string? searchTerm = null)
         {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IList<Claim> claim = identity.Claims.ToList();
+            var userRole = claim[3].Value;
+            if (userRole != "admin" )
+            {
+                return Unauthorized();
+            }
+
             try
             {
                 var query = _context.Users.AsQueryable();
@@ -60,8 +72,16 @@ namespace SWP391API.Controllers
         }
 
         [HttpGet("{userId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult GetUserById(int userId)
         {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IList<Claim> claim = identity.Claims.ToList();
+            var userRole = claim[3].Value;
+            if (userRole != "admin")
+            {
+                return Unauthorized();
+            }
             try
             {
                 var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
@@ -78,8 +98,16 @@ namespace SWP391API.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult AddUser(AddUserDTO addUserDTO)
         {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IList<Claim> claim = identity.Claims.ToList();
+            var userId = claim[3].Value;
+            if (userId != "admin")
+            {
+                return Unauthorized();
+            }
             var newUser = new User
             {
                 Username = addUserDTO.Username,
@@ -100,8 +128,16 @@ namespace SWP391API.Controllers
         }
 
         [HttpPut("{userId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult UpdateUser(int userId, UpdateUserDTO updateUserDTO)
         {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IList<Claim> claim = identity.Claims.ToList();
+            var userRole = claim[3].Value;
+            if (userRole != "admin")
+            {
+                return Unauthorized();
+            }
             User user = _context.Users.FirstOrDefault(u => u.UserId == userId);
 
             if (user == null)
@@ -120,8 +156,16 @@ namespace SWP391API.Controllers
         }
 
         [HttpDelete("{userId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult DeleteUser(int userId)
         {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IList<Claim> claim = identity.Claims.ToList();
+            var userRole = claim[3].Value;
+            if (userRole != "admin")
+            {
+                return Unauthorized();
+            }
             var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
 
             if (user == null)
