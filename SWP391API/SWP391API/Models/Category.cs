@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-#nullable disable
-
 namespace SWP391API.Models
 {
     public partial class Category
@@ -13,7 +11,7 @@ namespace SWP391API.Models
         }
 
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         public virtual ICollection<Product> Products { get; set; }
     }

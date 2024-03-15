@@ -3,20 +3,17 @@ using System.Collections.Generic;
 
 namespace SWP391API.Models
 {
-    public partial class Style
+    public partial class HomeStyle
     {
-        public Style()
+        public HomeStyle()
         {
-            CompletedProjects = new HashSet<CompletedProject>();
             Quotations = new HashSet<Quotation>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public double? Price { get; set; }
-        public string? Description { get; set; }
+        public decimal Price { get; set; }
 
-        public virtual ICollection<CompletedProject> CompletedProjects { get; set; }
         public virtual ICollection<Quotation> Quotations { get; set; }
     }
 }

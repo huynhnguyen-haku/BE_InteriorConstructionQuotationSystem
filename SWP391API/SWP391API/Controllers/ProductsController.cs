@@ -91,6 +91,21 @@ namespace SWP391API.Controllers
             return Ok(lis);
         }
 
+        [HttpGet("GetListHomeStyle")]
+        public IActionResult GetListHomeStyle()
+        {
+            var lis = _context.HomeStyles.ToList();
+            _context.Dispose(); // Giải phóng tài nguyên
+            return Ok(lis);
+        }
+
+        [HttpGet("GetListConstructionStyles")]
+        public IActionResult GetConstructionStyles(string TypeID)
+        {
+            var lis = _context.ConstructionStyles.Where(x=>x.ConstructionType == TypeID).ToList();
+            _context.Dispose(); // Giải phóng tài nguyên
+            return Ok(lis);
+        }
 
         [HttpPost]
         public IActionResult AddProduct(ProductRequest product)

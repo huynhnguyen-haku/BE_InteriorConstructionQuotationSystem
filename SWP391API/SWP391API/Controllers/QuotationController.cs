@@ -53,9 +53,9 @@ namespace SWP391API.Controllers
                 _context.Dispose(); // Giải phóng tài nguyên
             }
         }
-        [HttpGet("GetSubmitedQuotations")]
+        [HttpGet("GetSubmitedQuotationsOfUser")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public IActionResult GetSubmitedQuotations()
+        public IActionResult GetSubmitedQuotationsOfUser()
         {
             try
             {
@@ -63,7 +63,7 @@ namespace SWP391API.Controllers
                 IList<Claim> claim = identity.Claims.ToList();
                 var userId = claim[1].Value;
                 int uID = int.Parse(userId);
-                var responses = _context.Quotations.Include(x => x.Style).Where(x => x.UserId == uID).ToList();
+                var responses = _context.Quotations.Include(x => x.Style).Include(x => x.CeilingConstruct).Include(x => x.FloorConstruction).Include(x => x.HomeStyle).Include(x => x.WallConstruct).Include(x => x.User).ToList();
                 return Ok(responses);
             }
             catch (Exception e)
@@ -87,7 +87,7 @@ namespace SWP391API.Controllers
                 IList<Claim> claim = identity.Claims.ToList();
                 var userId = claim[1].Value;
                 int uID = int.Parse(userId);
-                var responses = _context.Quotations.Include(x=>x.Style).Include(x => x.User).ToList();
+                var responses = _context.Quotations.Include(x=>x.Style).Include(x => x.CeilingConstruct).Include(x => x.FloorConstruction).Include(x => x.HomeStyle).Include(x => x.WallConstruct).Include(x => x.User).ToList();
                 return Ok(responses);
             }
             catch (Exception e)
@@ -101,6 +101,36 @@ namespace SWP391API.Controllers
 
         }
 
+        [HttpGet("GetSubmitedQuotationById")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public IActionResult GetSubmitedQuotationById(int quotationId)
+        {
+            try
+            {
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                IList<Claim> claim = identity.Claims.ToList();
+                var userId = claim[1].Value;
+                int uID = int.Parse(userId);
+                var responses = _context.Quotations.Include(x => x.Style).Include(x => x.CeilingConstruct).Include(x => x.FloorConstruction).Include(x => x.HomeStyle).Include(x => x.WallConstruct).Include(x => x.User).Where(x => x.QuotationId == quotationId).FirstOrDefault();
+                if (responses== null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return Ok(responses);
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Có lỗi xảy ra: " + e.Message);
+            }
+            finally
+            {
+                _context.Dispose(); // Giải phóng tài nguyên
+            }
+
+        }
         [HttpGet("GetSubmitedQuotationDetail")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult GetSubmitedQuotationDetail(int quotationId)
@@ -217,13 +247,23 @@ namespace SWP391API.Controllers
                 var userIdValue = claim[1].Value;
                 int userId = int.Parse(userIdValue);
                 Quotation quotation = new Quotation();
-                quotation.TotalBill = req.TotalBill;
+                quotation.TotalBill = req.TotalConstructionCost + req.TotalProductCost;
                 quotation.QuotationStatus = "Pending";
                 quotation.CreatedAt = DateTime.Now;
                 quotation.StyleId = req.StyleId;
-                quotation.Square = req.Square;
+                quotation.Square = req.Witdh * req.Length;
                 quotation.UserId = userId;
                 quotation.Status = 1;
+                quotation.Witdh = req.Witdh;
+                quotation.Height = req.Height;
+                quotation.Length = req.Length;
+                quotation.TotalConstructionCost = req.TotalConstructionCost;
+                quotation.TotalProductCost = req.TotalProductCost;
+                quotation.HomeStyleId = req.HomeStyleId;
+                quotation.FloorConstructionId = req.FloorConstructionId;
+                quotation.WallConstructId = req.WallConstructId;
+                quotation.CeilingConstructId = req.CeilingConstructId;
+
                 _context.Quotations.Add(quotation);
                 _context.SaveChanges();
                 Quotation savedquo = _context.Quotations.OrderByDescending(x => x.QuotationId).Take(1).FirstOrDefault();
@@ -286,7 +326,7 @@ namespace SWP391API.Controllers
 
         [HttpDelete("/ClearQuotation")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public IActionResult ClearQuotation(int productId)
+        public IActionResult ClearQuotation()
         {
             try
             {

@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-
-#nullable disable
 
 namespace SWP391API.Models
 {
@@ -17,39 +16,33 @@ namespace SWP391API.Models
         {
         }
 
-        public virtual DbSet<Article> Articles { get; set; }
-        public virtual DbSet<ArticleType> ArticleTypes { get; set; }
-        public virtual DbSet<Category> Categories { get; set; }
-        public virtual DbSet<CompletedProject> CompletedProjects { get; set; }
-        public virtual DbSet<Contract> Contracts { get; set; }
-        public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<ProductInProject> ProductInProjects { get; set; }
-        public virtual DbSet<Quotation> Quotations { get; set; }
-        public virtual DbSet<QuotationDetail> QuotationDetails { get; set; }
-        public virtual DbSet<QuotationTemp> QuotationTemps { get; set; }
-        public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<Style> Styles { get; set; }
-        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Article> Articles { get; set; } = null!;
+        public virtual DbSet<ArticleType> ArticleTypes { get; set; } = null!;
+        public virtual DbSet<Category> Categories { get; set; } = null!;
+        public virtual DbSet<CompletedProject> CompletedProjects { get; set; } = null!;
+        public virtual DbSet<ConstructionStyle> ConstructionStyles { get; set; } = null!;
+        public virtual DbSet<Contract> Contracts { get; set; } = null!;
+        public virtual DbSet<HomeStyle> HomeStyles { get; set; } = null!;
+        public virtual DbSet<Product> Products { get; set; } = null!;
+        public virtual DbSet<ProductInProject> ProductInProjects { get; set; } = null!;
+        public virtual DbSet<Quotation> Quotations { get; set; } = null!;
+        public virtual DbSet<QuotationDetail> QuotationDetails { get; set; } = null!;
+        public virtual DbSet<QuotationTemp> QuotationTemps { get; set; } = null!;
+        public virtual DbSet<Role> Roles { get; set; } = null!;
+        public virtual DbSet<Style> Styles { get; set; } = null!;
+        public virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer(GetConnectionString());
-
-
-        private string GetConnectionString()
         {
-            IConfiguration config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true)
-                .Build();
-            var strConn = config.GetConnectionString("DefaultConnection");
-
-            return strConn;
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=14.225.205.28,1435;uid=sa;pwd=Abc@123123;database=InteriorConstructionQuotationSystem;TrustServerCertificate=True;");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
-
             modelBuilder.Entity<Article>(entity =>
             {
                 entity.ToTable("article");
@@ -66,8 +59,13 @@ namespace SWP391API.Models
                     .HasColumnType("date")
                     .HasColumnName("created_at");
 
+                entity.Property(e => e.Img).HasColumnType("ntext");
+
+                entity.Property(e => e.Status)
+                    .HasColumnName("status")
+                    .HasDefaultValueSql("((1))");
+
                 entity.Property(e => e.Title)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("title");
 
@@ -77,13 +75,13 @@ namespace SWP391API.Models
                     .WithMany(p => p.Articles)
                     .HasForeignKey(d => d.ArticleTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__article__article__1CF15040");
+                    .HasConstraintName("FK__article__article__6C190EBB");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Articles)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__article__user_id__1BFD2C07");
+                    .HasConstraintName("FK__article__user_id__6D0D32F4");
             });
 
             modelBuilder.Entity<ArticleType>(entity =>
@@ -104,7 +102,6 @@ namespace SWP391API.Models
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Name)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("name");
             });
@@ -112,7 +109,7 @@ namespace SWP391API.Models
             modelBuilder.Entity<CompletedProject>(entity =>
             {
                 entity.HasKey(e => e.ProjectId)
-                    .HasName("PK__complete__BC799E1F20221A3E");
+                    .HasName("PK__complete__BC799E1F43E8F264");
 
                 entity.ToTable("completedProject");
 
@@ -122,17 +119,15 @@ namespace SWP391API.Models
                     .HasColumnType("date")
                     .HasColumnName("endDate");
 
-
                 entity.Property(e => e.ProjectDescription)
-                    .HasMaxLength(255)
+                    .HasMaxLength(4000)
                     .HasColumnName("project_description");
 
                 entity.Property(e => e.ProjectImage)
-                    .HasMaxLength(255)
+                    .HasMaxLength(4000)
                     .HasColumnName("project_image");
 
                 entity.Property(e => e.ProjectTitle)
-                    .IsRequired()
                     .HasMaxLength(255)
                     .HasColumnName("project_title");
 
@@ -148,13 +143,26 @@ namespace SWP391API.Models
                     .WithMany(p => p.CompletedProjects)
                     .HasForeignKey(d => d.StyleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__completed__style__5629CD9C");
+                    .HasConstraintName("FK__completed__style__6E01572D");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.CompletedProjects)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__completed__user___571DF1D5");
+                    .HasConstraintName("FK__completed__user___6EF57B66");
+            });
+
+            modelBuilder.Entity<ConstructionStyle>(entity =>
+            {
+                entity.ToTable("construction_style");
+
+                entity.Property(e => e.ConstructionType)
+                    .HasMaxLength(100)
+                    .HasColumnName("construction_type");
+
+                entity.Property(e => e.Name).HasMaxLength(100);
+
+                entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
             });
 
             modelBuilder.Entity<Contract>(entity =>
@@ -164,7 +172,6 @@ namespace SWP391API.Models
                 entity.Property(e => e.ContractId).HasColumnName("contract_id");
 
                 entity.Property(e => e.ContractStatus)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("contract_status");
 
@@ -177,7 +184,16 @@ namespace SWP391API.Models
                 entity.HasOne(d => d.Quotation)
                     .WithMany(p => p.Contracts)
                     .HasForeignKey(d => d.QuotationId)
-                    .HasConstraintName("FK__contract__quotat__4F7CD00D");
+                    .HasConstraintName("FK__contract__quotat__6FE99F9F");
+            });
+
+            modelBuilder.Entity<HomeStyle>(entity =>
+            {
+                entity.ToTable("home_style");
+
+                entity.Property(e => e.Name).HasMaxLength(100);
+
+                entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -202,7 +218,6 @@ namespace SWP391API.Models
                     .HasColumnName("image_url");
 
                 entity.Property(e => e.Name)
-                    .IsRequired()
                     .HasMaxLength(255)
                     .HasColumnName("name");
 
@@ -213,6 +228,10 @@ namespace SWP391API.Models
                 entity.Property(e => e.Size)
                     .HasMaxLength(255)
                     .HasColumnName("size");
+
+                entity.Property(e => e.Status)
+                    .HasColumnName("status")
+                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.UpdatedAt)
                     .HasColumnType("datetime")
@@ -225,13 +244,13 @@ namespace SWP391API.Models
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.CategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__product__categor__3C69FB99");
+                    .HasConstraintName("FK__product__categor__70DDC3D8");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__product__user_id__3D5E1FD2");
+                    .HasConstraintName("FK__product__user_id__71D1E811");
             });
 
             modelBuilder.Entity<ProductInProject>(entity =>
@@ -269,8 +288,15 @@ namespace SWP391API.Models
                     .HasColumnType("datetime")
                     .HasColumnName("created_at");
 
+                entity.Property(e => e.FloorConstructionId).HasColumnName("floorConstructionId");
+
+                entity.Property(e => e.Height).HasColumnName("height");
+
+                entity.Property(e => e.HomeStyleId).HasColumnName("homeStyleId");
+
+                entity.Property(e => e.Length).HasColumnName("length");
+
                 entity.Property(e => e.QuotationStatus)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("quotation_status");
 
@@ -282,7 +308,28 @@ namespace SWP391API.Models
 
                 entity.Property(e => e.TotalBill).HasColumnName("totalBill");
 
+                entity.Property(e => e.TotalConstructionCost).HasColumnName("totalConstructionCost");
+
+                entity.Property(e => e.TotalProductCost).HasColumnName("totalProductCost");
+
                 entity.Property(e => e.UserId).HasColumnName("user_id");
+
+                entity.Property(e => e.Witdh).HasColumnName("witdh");
+
+                entity.HasOne(d => d.CeilingConstruct)
+                    .WithMany(p => p.QuotationCeilingConstructs)
+                    .HasForeignKey(d => d.CeilingConstructId)
+                    .HasConstraintName("FK_quotation_construction_CeilingConstructIdstyle");
+
+                entity.HasOne(d => d.FloorConstruction)
+                    .WithMany(p => p.QuotationFloorConstructions)
+                    .HasForeignKey(d => d.FloorConstructionId)
+                    .HasConstraintName("FK_quotation_construction_floorConstructionIdstyle");
+
+                entity.HasOne(d => d.HomeStyle)
+                    .WithMany(p => p.Quotations)
+                    .HasForeignKey(d => d.HomeStyleId)
+                    .HasConstraintName("FK_quotation_home_style");
 
                 entity.HasOne(d => d.Style)
                     .WithMany(p => p.Quotations)
@@ -293,6 +340,11 @@ namespace SWP391API.Models
                     .WithMany(p => p.Quotations)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_quotation_user");
+
+                entity.HasOne(d => d.WallConstruct)
+                    .WithMany(p => p.QuotationWallConstructs)
+                    .HasForeignKey(d => d.WallConstructId)
+                    .HasConstraintName("FK_quotation_construction_WallConstructIdstyle");
             });
 
             modelBuilder.Entity<QuotationDetail>(entity =>
@@ -358,7 +410,6 @@ namespace SWP391API.Models
                 entity.Property(e => e.RoleId).HasColumnName("role_id");
 
                 entity.Property(e => e.RoleName)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("role_name");
             });
@@ -374,7 +425,6 @@ namespace SWP391API.Models
                     .HasColumnName("description");
 
                 entity.Property(e => e.Name)
-                    .IsRequired()
                     .HasMaxLength(255)
                     .HasColumnName("name");
 
@@ -404,12 +454,10 @@ namespace SWP391API.Models
                     .HasColumnName("expireDate");
 
                 entity.Property(e => e.Fullname)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("fullname");
 
                 entity.Property(e => e.Password)
-                    .IsRequired()
                     .HasMaxLength(255)
                     .HasColumnName("password");
 
@@ -419,12 +467,15 @@ namespace SWP391API.Models
 
                 entity.Property(e => e.RoleId).HasColumnName("role_id");
 
+                entity.Property(e => e.Status)
+                    .HasColumnName("status")
+                    .HasDefaultValueSql("((1))");
+
                 entity.Property(e => e.Token)
                     .HasMaxLength(3000)
                     .HasColumnName("token");
 
                 entity.Property(e => e.Username)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("username");
 
@@ -432,7 +483,7 @@ namespace SWP391API.Models
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.RoleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__user__role_id__164452B1");
+                    .HasConstraintName("FK__user__role_id__7A672E12");
             });
 
             OnModelCreatingPartial(modelBuilder);
