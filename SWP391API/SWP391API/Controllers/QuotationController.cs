@@ -103,7 +103,7 @@ namespace SWP391API.Controllers
                     ReferenceHandler = ReferenceHandler.Preserve
                 };
                 var jsonString = JsonSerializer.Serialize(responses, options);
-                return Ok(jsonString);
+                return Ok(responses);
             }
             catch (Exception e)
             {
