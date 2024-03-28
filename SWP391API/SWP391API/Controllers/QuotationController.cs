@@ -66,15 +66,12 @@ namespace SWP391API.Controllers
                 IList<Claim> claim = identity.Claims.ToList();
                 var userId = claim[1].Value;
                 int uID = int.Parse(userId);
-                List< Quotation> responses = _context.Quotations.Include(x => x.Style).Include(x => x.CeilingConstruct).Include(x => x.FloorConstruction).Include(x => x.HomeStyle).Include(x => x.WallConstruct).Include(x => x.User).ToList();
-                var options = new JsonSerializerOptions
-                {
-                    ReferenceHandler = ReferenceHandler.Preserve
-                };
-                var jsonString = JsonSerializer.Serialize(responses, options);
+                var quotations = _context.Quotations
+                    .Where(x => x.UserId == uID)
+                    .Select(q => new QuotationResponse(q))
+                    .ToList();
 
-
-                return Ok(responses);
+                return Ok(quotations);
             }
             catch (Exception e)
             {
@@ -84,8 +81,9 @@ namespace SWP391API.Controllers
             {
                 _context.Dispose(); // Giải phóng tài nguyên
             }
-
         }
+
+
 
         [HttpGet("GetAllSubmitedQuotations")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -93,17 +91,17 @@ namespace SWP391API.Controllers
         {
             try
             {
-                var identity = HttpContext.User.Identity as ClaimsIdentity;
-                IList<Claim> claim = identity.Claims.ToList();
-                var userId = claim[1].Value;
-                int uID = int.Parse(userId);
-                var responses = _context.Quotations.Include(x=>x.Style).Include(x => x.CeilingConstruct).Include(x => x.FloorConstruction).Include(x => x.HomeStyle).Include(x => x.WallConstruct).Include(x => x.User).ToList();
-                var options = new JsonSerializerOptions
-                {
-                    ReferenceHandler = ReferenceHandler.Preserve
-                };
-                var jsonString = JsonSerializer.Serialize(responses, options);
-                return Ok(responses);
+                var quotations = _context.Quotations
+                    .Include(x => x.Style)
+                    .Include(x => x.CeilingConstruct)
+                    .Include(x => x.FloorConstruction)
+                    .Include(x => x.HomeStyle)
+                    .Include(x => x.WallConstruct)
+                    .Include(x => x.User)
+                    .Select(q => new QuotationGetAll(q))
+                    .ToList();
+
+                return Ok(quotations);
             }
             catch (Exception e)
             {
@@ -113,8 +111,8 @@ namespace SWP391API.Controllers
             {
                 _context.Dispose(); // Giải phóng tài nguyên
             }
-
         }
+
 
         [HttpGet("GetSubmitedQuotationById")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -221,35 +219,43 @@ namespace SWP391API.Controllers
 
         [HttpPut]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public IActionResult UpdateQuotationTemp(QuotationTempRequest quotationTemp)
+        public IActionResult UpdateQuotationStatus(QuotationRequest quotationRequest)
         {
             try
             {
-                var product = _context.Products.FirstOrDefault(x => x.ProductId == quotationTemp.ProductId);
-                if (product == null)
-                {
-                    return Ok("Product Id not exist. Try Again!");
-                }
-                var identity = HttpContext.User.Identity as ClaimsIdentity;
-                IList<Claim> claim = identity.Claims.ToList();
-                var userIdValue = claim[1].Value;
-                int userId = int.Parse(userIdValue);
-                QuotationTemp quotation = _context.QuotationTemps.FirstOrDefault(qt => qt.UserId == userId && qt.ProductId == quotationTemp.ProductId);
+                Quotation quotation = _context.Quotations.FirstOrDefault(q => q.QuotationId == quotationRequest.QuotationId);
                 if (quotation == null)
                 {
-                    return Ok("Product Id not exist in quotation of this person. Try Again!");
+                    return Ok("Quotation Id not exist. Try Again!");
                 }
-                quotation.Quantity = quotationTemp.Quantity;
-                _context.QuotationTemps.Update(quotation);
+
+                quotation.QuotationStatus = quotationRequest.QuotationStatus;
+                _context.Quotations.Update(quotation);
                 _context.SaveChanges();
-                _context.Dispose(); // Giải phóng tài nguyên
+
                 return Ok();
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                // Kiểm tra xem có Inner Exception không
+                if (e.InnerException != null)
+                {
+                    // Truy cập và xử lý thông tin của Inner Exception
+                    var innerException = e.InnerException;
+                    // Trả về thông báo lỗi kèm theo thông tin của Inner Exception
+                    return BadRequest("Error occurred while updating quotation status. Inner Exception: " + innerException.Message);
+                }
+                else
+                {
+                    // Nếu không có Inner Exception, trả về thông báo lỗi thông thường
+                    return BadRequest("Error occurred while updating quotation status. Exception: " + e.Message);
+                }
             }
         }
+
+
+
+
 
         [HttpPost("SubmitQuotation")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

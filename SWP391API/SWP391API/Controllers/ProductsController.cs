@@ -54,6 +54,7 @@ namespace SWP391API.Controllers
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
                     .ToList();
+                // Mapping từ product sang product response, khi trả về thì sẽ là respone
                 List<ProductResponse> responses = new List<ProductResponse>();
                 foreach (var product in products)
                 {
@@ -108,22 +109,24 @@ namespace SWP391API.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddProduct(ProductRequest product)
+        public IActionResult AddProduct(NewProductRequest product)
         {
+            // Tạo một sản phẩm mới và gán các thuộc tính từ request
             Product p = new Product();
-            p.ProductId = 0;
             p.CategoryId = product.CategoryId;
             p.UserId = product.UserId;
             p.Name = product.Name;
             p.Price = product.Price;
             p.Description = product.Description;
             p.Size = product.Size;
-            p.Status = product.Status;
             p.ImageUrl = product.ImageUrl;
-            p.CreatedAt = DateTime.Now;
+            p.CreatedAt = DateTime.Now; // Sử dụng thời gian hiện tại nếu không có giá trị được cung cấp
+            p.Status = product.Status;
+
+            // Thêm sản phẩm vào context và lưu thay đổi vào database
             _context.Products.Add(p);
             _context.SaveChanges();
-            _context.Dispose(); // Giải phóng tài nguyên
+
             return Ok();
         }
 
