@@ -74,6 +74,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
+
 builder.Services.AddCors();
 
 builder.Services.AddAuthorization();

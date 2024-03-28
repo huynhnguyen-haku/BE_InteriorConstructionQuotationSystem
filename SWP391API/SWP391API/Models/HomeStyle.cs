@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace SWP391API.Models
 {
@@ -14,6 +15,7 @@ namespace SWP391API.Models
         public string Name { get; set; } = null!;
         public decimal Price { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<Quotation> Quotations { get; set; }
     }
 }

@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using SWP391API.DTO;
 using SWP391API.Models;
 using System.Security.Claims;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace SWP391API.Controllers
 {
@@ -63,7 +66,14 @@ namespace SWP391API.Controllers
                 IList<Claim> claim = identity.Claims.ToList();
                 var userId = claim[1].Value;
                 int uID = int.Parse(userId);
-                var responses = _context.Quotations.Include(x => x.Style).Include(x => x.CeilingConstruct).Include(x => x.FloorConstruction).Include(x => x.HomeStyle).Include(x => x.WallConstruct).Include(x => x.User).ToList();
+                List< Quotation> responses = _context.Quotations.Include(x => x.Style).Include(x => x.CeilingConstruct).Include(x => x.FloorConstruction).Include(x => x.HomeStyle).Include(x => x.WallConstruct).Include(x => x.User).ToList();
+                var options = new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve
+                };
+                var jsonString = JsonSerializer.Serialize(responses, options);
+
+
                 return Ok(responses);
             }
             catch (Exception e)
@@ -88,7 +98,12 @@ namespace SWP391API.Controllers
                 var userId = claim[1].Value;
                 int uID = int.Parse(userId);
                 var responses = _context.Quotations.Include(x=>x.Style).Include(x => x.CeilingConstruct).Include(x => x.FloorConstruction).Include(x => x.HomeStyle).Include(x => x.WallConstruct).Include(x => x.User).ToList();
-                return Ok(responses);
+                var options = new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve
+                };
+                var jsonString = JsonSerializer.Serialize(responses, options);
+                return Ok(jsonString);
             }
             catch (Exception e)
             {
