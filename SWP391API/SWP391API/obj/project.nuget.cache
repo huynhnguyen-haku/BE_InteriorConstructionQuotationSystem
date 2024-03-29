@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "RxBf1Yzh+q0kZhATlDyA167hh2FJBBcdemyfvixeh4TGAhDDGzby6gP908W7VTbc9vLXZFIv7py95pE9a1CJKg==",
+  "dgSpecHash": "zsBjv8G3E2GBv2w9UnDlVmgm95N9y6U65Wu4eVAwiUMjpZRIBNk4lG5FsBjAOgPGsgvbX931zEqzeVG3aaxfKA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Huynh Nguyen\\Desktop\\swp391api\\SWP391API\\SWP391API\\SWP391API.csproj",
+  "projectFilePath": "C:\\Users\\Huynh Nguyen\\Documents\\BE_InteriorConstructionQuotationSystem\\SWP391API\\SWP391API\\SWP391API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Huynh Nguyen\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Huynh Nguyen\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.20\\microsoft.aspnetcore.authentication.jwtbearer.6.0.20.nupkg.sha512",

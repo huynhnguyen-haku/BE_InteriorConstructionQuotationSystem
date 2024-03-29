@@ -2594,11 +2594,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Huynh Nguyen\\Desktop\\swp391api\\SWP391API\\SWP391API\\SWP391API.csproj",
+      "projectUniqueName": "C:\\Users\\Huynh Nguyen\\Documents\\BE_InteriorConstructionQuotationSystem\\SWP391API\\SWP391API\\SWP391API.csproj",
       "projectName": "SWP391API",
-      "projectPath": "C:\\Users\\Huynh Nguyen\\Desktop\\swp391api\\SWP391API\\SWP391API\\SWP391API.csproj",
+      "projectPath": "C:\\Users\\Huynh Nguyen\\Documents\\BE_InteriorConstructionQuotationSystem\\SWP391API\\SWP391API\\SWP391API.csproj",
       "packagesPath": "C:\\Users\\Huynh Nguyen\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Huynh Nguyen\\Desktop\\swp391api\\SWP391API\\SWP391API\\obj\\",
+      "outputPath": "C:\\Users\\Huynh Nguyen\\Documents\\BE_InteriorConstructionQuotationSystem\\SWP391API\\SWP391API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Huynh Nguyen\\AppData\\Roaming\\NuGet\\NuGet.Config",
