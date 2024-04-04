@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace SWP391API.Models
+﻿namespace SWP391API.Models
 {
     public partial class CompletedProject
     {
@@ -15,9 +12,18 @@ namespace SWP391API.Models
         public int UserId { get; set; }
         public string ProjectTitle { get; set; } = null!;
         public string? ProjectDescription { get; set; }
+
+        public string ProjectInformation { get; set; } = null!;
+        public string ProjectResult { get; set; } = null!;
+        public string Location { get; set; } = null!;
+
+        public double SurfaceArea { get; set; }
+
         public string? ProjectImage { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+
+
 
         public virtual Style Style { get; set; } = null!;
         public virtual User User { get; set; } = null!;

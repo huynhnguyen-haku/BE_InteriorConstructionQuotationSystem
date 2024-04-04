@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SWP391API.DTO;
 using SWP391API.Models;
-using System.Collections.Generic;
+using SWP391API.Services;
 
 namespace SWP391API.Controllers
 {
@@ -11,57 +10,40 @@ namespace SWP391API.Controllers
     [ApiController]
     public class ProjectsController : ControllerBase
     {
-        private readonly InteriorConstructionQuotationSystemContext _context;
+        private readonly ICompletedProjectService _completedProjectService;
 
-        public ProjectsController(InteriorConstructionQuotationSystemContext context)
+        public ProjectsController(ICompletedProjectService completedProjectService)
         {
-            _context = context;
+            _completedProjectService = completedProjectService;
         }
 
         [HttpGet]
-        public IActionResult GetListProducts([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchName = null,[FromQuery] bool sortByDateDescending = true)
+        public async Task<IActionResult> GetListProducts([FromQuery] CompletedProjectFilterDTO completedProjectFilterDTO)
         {
-            var query = _context.CompletedProjects
-            .AsQueryable();
-
-            if (!string.IsNullOrEmpty(searchName))
+            try
             {
-                query = query.Where(p => p.ProjectTitle.Contains(searchName));
+                var completedProjects = await _completedProjectService.getAll(completedProjectFilterDTO);
+
+                return Ok(completedProjects);
+            } catch (Exception ex)
+            {
+                return BadRequest(new ErrorDTO(ex.Message));
             }
-
-
-            query = sortByDateDescending
-                ? query.OrderByDescending(p => p.StartDate)
-                : query.OrderBy(p => p.StartDate);
-
-            var totalCount = query.Count();
-            List<CompletedProject> products = query
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-            var obj = new { products, totalCount };
-            _context.Dispose(); // Giải phóng tài nguyên
-            return Ok(obj);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetProjectDetails(int id)
+        public async Task<IActionResult> GetProjectDetails(int id, [FromQuery] CompletedProjectFilterDTO completedProjectFilterDTO)
         {
-            CompletedProject project = _context.CompletedProjects
-            .FirstOrDefault(p => p.ProjectId == id);
-            List<ProductInProject> productInProjects = _context.ProductInProjects.Where(x => x.ProjectId == id).ToList();
-            List<ProductResponse> pl = new List<ProductResponse>();
-            foreach (var product in productInProjects)
+            try
             {
-                Product pro = _context.Products.Include(x=>x.Category).FirstOrDefault(x => x.ProductId == product.ProductId);
-                ProductResponse productResponse = new ProductResponse(pro);
-                pl.Add(productResponse);
+                var completedProject = await _completedProjectService.getById(id, completedProjectFilterDTO);
+
+                return Ok(completedProject);
+
+            } catch (Exception ex)
+            {
+                return BadRequest(new ErrorDTO(ex.Message));
             }
-            if (project == null)
-                return NotFound();
-            ProjectResponse response = new ProjectResponse(project, pl);
-            _context.Dispose(); // Giải phóng tài nguyên
-            return Ok(response);
         }
 
     }
