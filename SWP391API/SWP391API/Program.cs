@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SWP391API.Hubs;
 using SWP391API.Models;
+using SWP391API.Repositories;
+using SWP391API.Services;
+using SWP391API.Services.Implements;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -21,13 +24,27 @@ if (!builder.Environment.IsDevelopment())
     });
 }
 
+
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
 });
+
 builder.Services.AddScoped<InteriorConstructionQuotationSystemContext>();
+builder.Services.AddScoped<IAuthenticateService, AuthenticateService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IQuotationService, QuotationService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<ICompletedProjectService, CompletedProjectService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+
+builder.Services.AddScoped(typeof(Repository<>));
+
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 // Cấu hình swagger
@@ -71,14 +88,38 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-        
+    };
+
+    // SignalR onMessageReceived event to read the access token from the query string
+    option.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+
+            var path = context.HttpContext.Request.Path;
+
+            if (string.IsNullOrEmpty(accessToken) == false &&
+            (path.StartsWithSegments("/notification-hub") || path.StartsWithSegments("/chat-hub")))
+            {
+                context.Token = accessToken;
+            }
+
+            return Task.CompletedTask;
+        }
     };
 });
+
+builder.Services.AddSignalR(); //websocket signalR library
 
 
 builder.Services.AddCors();
 
 builder.Services.AddAuthorization();
+
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -94,9 +135,12 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<NotificationHub>("/notification-hub");
+app.MapHub<ChatHub>("/chat-hub");
 
 app.Run();
