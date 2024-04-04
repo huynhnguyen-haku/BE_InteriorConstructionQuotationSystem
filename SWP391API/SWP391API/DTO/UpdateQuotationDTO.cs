@@ -2,8 +2,11 @@
 
 namespace SWP391API.DTO
 {
-    public class SubmitQuotationDTO
+    public class UpdateQuotationDTO
     {
+        [Required]
+        public int QuotationId { get; set; }
+
         [Required]
         [Range(1, double.MaxValue)]
         public int? StyleId { get; set; }
