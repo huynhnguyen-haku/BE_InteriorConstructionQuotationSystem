@@ -1,14 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using SWP391API.DTO;
 using SWP391API.Models;
-using System.Security.Claims;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using SWP391API.Services;
 
 namespace SWP391API.Controllers
 {
@@ -17,10 +13,14 @@ namespace SWP391API.Controllers
     public class QuotationController : ControllerBase
     {
         private readonly InteriorConstructionQuotationSystemContext _context;
+        private readonly IQuotationService _quotationService;
+        private readonly IAuthenticateService _authenticateService;
 
-        public QuotationController(InteriorConstructionQuotationSystemContext context)
+        public QuotationController(InteriorConstructionQuotationSystemContext context, IQuotationService quotationService, IAuthenticateService authenticateService)
         {
             _context = context;
+            _quotationService = quotationService;
+            _authenticateService = authenticateService;
         }
 
         [HttpGet]
@@ -30,10 +30,8 @@ namespace SWP391API.Controllers
             try
             {
 
-                var identity = HttpContext.User.Identity as ClaimsIdentity;
-                IList<Claim> claim = identity.Claims.ToList();
-                var userId = claim[1].Value;
-                int uID = int.Parse(userId);
+                int uID = _authenticateService.getCurrentUserId();
+
                 List<QuotationTemp> quotationTemps = _context.QuotationTemps
                 .Include(qt => qt.Product)
                 .Include(qt => qt.User).Where(x => x.UserId == uID)
@@ -58,59 +56,54 @@ namespace SWP391API.Controllers
         }
         [HttpGet("GetSubmitedQuotationsOfUser")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public IActionResult GetSubmitedQuotationsOfUser()
+        public async Task<IActionResult> GetSubmitedQuotationsOfUser([FromQuery] QuotationFilterDTO quotationFilterDTO)
         {
             try
             {
-                var identity = HttpContext.User.Identity as ClaimsIdentity;
-                IList<Claim> claim = identity.Claims.ToList();
-                var userId = claim[1].Value;
-                int uID = int.Parse(userId);
-                var quotations = _context.Quotations
-                    .Where(x => x.UserId == uID)
-                    .Select(q => new QuotationResponse(q))
-                    .ToList();
+                int uID = _authenticateService.getCurrentUserId();
+
+                List<QuotationResponseDTO> quotations = await _quotationService.getQuotationsOfUser(uID, quotationFilterDTO);
 
                 return Ok(quotations);
             }
+            catch(Exception ex)
+            {
+                return BadRequest(new ErrorDTO(ex.Message));
+            }
+        }
+
+        [HttpPost("{id}/send")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> SendFinalQuotationContractToUser(int id)
+        {
+            try
+            {
+                await _quotationService.sendFinalQuotationContractToUser(id);
+
+                return Ok();
+            }
             catch (Exception e)
             {
-                return BadRequest("Có lỗi xảy ra: " + e.Message);
-            }
-            finally
-            {
-                _context.Dispose(); // Giải phóng tài nguyên
+                return BadRequest(new ErrorDTO(e.Message));
             }
         }
 
 
-
         [HttpGet("GetAllSubmitedQuotations")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public IActionResult GetAllSubmitedQuotations()
+        public async Task<IActionResult> GetAllSubmitedQuotations([FromQuery] QuotationFilterDTO quotationFilterDTO)
         {
             try
             {
-                var quotations = _context.Quotations
-                    .Include(x => x.Style)
-                    .Include(x => x.CeilingConstruct)
-                    .Include(x => x.FloorConstruction)
-                    .Include(x => x.HomeStyle)
-                    .Include(x => x.WallConstruct)
-                    .Include(x => x.User)
-                    .Select(q => new QuotationGetAll(q))
-                    .ToList();
+                List<QuotationResponseDTO> quotations = await _quotationService.getAllQuotations(quotationFilterDTO);
 
                 return Ok(quotations);
             }
             catch (Exception e)
             {
-                return BadRequest("Có lỗi xảy ra: " + e.Message);
+                return BadRequest(new ErrorDTO(e.Message));
             }
-            finally
-            {
-                _context.Dispose(); // Giải phóng tài nguyên
-            }
+      
         }
 
 
@@ -119,11 +112,8 @@ namespace SWP391API.Controllers
         public IActionResult GetSubmitedQuotationById(int quotationId)
         {
             try
-            {
-                var identity = HttpContext.User.Identity as ClaimsIdentity;
-                IList<Claim> claim = identity.Claims.ToList();
-                var userId = claim[1].Value;
-                int uID = int.Parse(userId);
+            {                
+
                 var responses = _context.Quotations.Include(x => x.Style).Include(x => x.CeilingConstruct).Include(x => x.FloorConstruction).Include(x => x.HomeStyle).Include(x => x.WallConstruct).Include(x => x.User).Where(x => x.QuotationId == quotationId).FirstOrDefault();
                 if (responses== null)
                 {
@@ -150,10 +140,7 @@ namespace SWP391API.Controllers
         {
             try
             {
-                var identity = HttpContext.User.Identity as ClaimsIdentity;
-                IList<Claim> claim = identity.Claims.ToList();
-                var userId = claim[1].Value;
-                int uID = int.Parse(userId);
+              
                 List<QuotationDetail> responses = _context.QuotationDetails.Include(x => x.Product).Where(x => x.QuotationId == quotationId).ToList();
                 if(responses.Count == 0)
                 {
@@ -181,15 +168,14 @@ namespace SWP391API.Controllers
         {
             try
             {
-                var identity = HttpContext.User.Identity as ClaimsIdentity;
-                IList<Claim> claim = identity.Claims.ToList();
-                var userIdValue = claim[1].Value;
+                int userId = _authenticateService.getCurrentUserId();
+
                 var product = _context.Products.FirstOrDefault(x => x.ProductId == quotationTemp.ProductId);
                 if (product == null)
                 {
                     return Ok("Product Id not exist. Try Again!");
                 }
-                int userId = int.Parse(userIdValue);
+                
                 QuotationTemp checkExist = _context.QuotationTemps.FirstOrDefault(qt => qt.UserId == userId && qt.ProductId == quotationTemp.ProductId);
                 if (checkExist == null)
                 {
@@ -219,96 +205,55 @@ namespace SWP391API.Controllers
 
         [HttpPut]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public IActionResult UpdateQuotationStatus(QuotationRequest quotationRequest)
+        public async Task<IActionResult> UpdateWholeQuotation(UpdateQuotationDTO updateQuotationDTO)
         {
             try
             {
-                Quotation quotation = _context.Quotations.FirstOrDefault(q => q.QuotationId == quotationRequest.QuotationId);
-                if (quotation == null)
-                {
-                    return Ok("Quotation Id not exist. Try Again!");
-                }
+                int userId = _authenticateService.getCurrentUserId();
 
-                quotation.QuotationStatus = quotationRequest.QuotationStatus;
-                _context.Quotations.Update(quotation);
-                _context.SaveChanges();
+                QuotationResponseDTO quotationDTO = await _quotationService.updateQuotation(updateQuotationDTO);
 
-                return Ok();
+                return Ok(quotationDTO);
             }
             catch (Exception e)
             {
-                // Kiểm tra xem có Inner Exception không
-                if (e.InnerException != null)
-                {
-                    // Truy cập và xử lý thông tin của Inner Exception
-                    var innerException = e.InnerException;
-                    // Trả về thông báo lỗi kèm theo thông tin của Inner Exception
-                    return BadRequest("Error occurred while updating quotation status. Inner Exception: " + innerException.Message);
-                }
-                else
-                {
-                    // Nếu không có Inner Exception, trả về thông báo lỗi thông thường
-                    return BadRequest("Error occurred while updating quotation status. Exception: " + e.Message);
-                }
+                return BadRequest(new ErrorDTO(e.Message));
             }
+
         }
 
+        [HttpPatch("Status")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> UpdateQuotationStatus(QuotationUpdateStatusDTO quotationUpdateStatusDTO)
+        {
+            try
+            {
+               await _quotationService.updateQuotationStatus(quotationUpdateStatusDTO);
+            }
+            catch (Exception e)
+            {
+                BadRequest(new ErrorDTO(e.Message));
+            }
 
-
+            return Ok();
+        }
 
 
         [HttpPost("SubmitQuotation")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public IActionResult SubmitQuotation(SubmitQuotationDTO req)
+        public async Task<IActionResult> SubmitQuotation(SubmitQuotationDTO req)
         {
             try
             {
-                var identity = HttpContext.User.Identity as ClaimsIdentity;
-                IList<Claim> claim = identity.Claims.ToList();
-                var userIdValue = claim[1].Value;
-                int userId = int.Parse(userIdValue);
-                Quotation quotation = new Quotation();
-                quotation.TotalBill = req.TotalConstructionCost + req.TotalProductCost;
-                quotation.QuotationStatus = "Pending";
-                quotation.CreatedAt = DateTime.Now;
-                quotation.StyleId = req.StyleId;
-                quotation.Square = req.Witdh * req.Length;
-                quotation.UserId = userId;
-                quotation.Status = 1;
-                quotation.Witdh = req.Witdh;
-                quotation.Height = req.Height;
-                quotation.Length = req.Length;
-                quotation.TotalConstructionCost = req.TotalConstructionCost;
-                quotation.TotalProductCost = req.TotalProductCost;
-                quotation.HomeStyleId = req.HomeStyleId;
-                quotation.FloorConstructionId = req.FloorConstructionId;
-                quotation.WallConstructId = req.WallConstructId;
-                quotation.CeilingConstructId = req.CeilingConstructId;
+                int userId = _authenticateService.getCurrentUserId();
+                
+                QuotationResponseDTO quotationDTO = await _quotationService.createQuotation(userId, req);
 
-                _context.Quotations.Add(quotation);
-                _context.SaveChanges();
-                Quotation savedquo = _context.Quotations.OrderByDescending(x => x.QuotationId).Take(1).FirstOrDefault();
-
-                List<QuotationDetail> quotationDetails = new List<QuotationDetail>();
-                foreach (QuotationDetailDTO quotationDetailDTO in req.quotationDetailDTOs)
-                {
-
-                    QuotationDetail quotationDetail = new QuotationDetail();
-                    quotationDetail.ProductId = quotationDetailDTO.ProductId;
-                    quotationDetail.Quantity = quotationDetailDTO.Quantity;
-                    quotationDetail.Price = quotationDetailDTO.Price;
-                    quotationDetail.QuotationId = savedquo.QuotationId;
-                    quotationDetails.Add(quotationDetail);
-                }
-                _context.QuotationDetails.AddRange(quotationDetails);
-                _context.SaveChanges();
-                _context.Dispose(); // Giải phóng tài nguyên
-
-                return Ok("Submit quotation successfully!");
+                return Ok(quotationDTO);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorDTO(e.Message));
             }
 
         }
@@ -319,10 +264,8 @@ namespace SWP391API.Controllers
         {
             try
             {
-                var identity = HttpContext.User.Identity as ClaimsIdentity;
-                IList<Claim> claim = identity.Claims.ToList();
-                var userIdValue = claim[1].Value;
-                int userId = int.Parse(userIdValue);
+                int userId = _authenticateService.getCurrentUserId();
+
                 var quotationTemp = _context.QuotationTemps.FirstOrDefault(qt => qt.UserId == userId && qt.ProductId == productId);
 
                 if (quotationTemp != null)
@@ -351,10 +294,8 @@ namespace SWP391API.Controllers
         {
             try
             {
-                var identity = HttpContext.User.Identity as ClaimsIdentity;
-                IList<Claim> claim = identity.Claims.ToList();
-                var userIdValue = claim[1].Value;
-                int userId = int.Parse(userIdValue);
+                int userId = _authenticateService.getCurrentUserId();
+
                 List<QuotationTemp> quotationTemps = _context.QuotationTemps.Where(qt => qt.UserId == userId).ToList();
 
                 if (quotationTemps.Count != 0)
