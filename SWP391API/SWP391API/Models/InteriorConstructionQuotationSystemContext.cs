@@ -7,13 +7,18 @@ namespace SWP391API.Models
 {
     public partial class InteriorConstructionQuotationSystemContext : DbContext
     {
-        public InteriorConstructionQuotationSystemContext()
+        public IConfiguration configuration;
+
+        //inject configuration for sql connection string in appsettings.json
+        public InteriorConstructionQuotationSystemContext(IConfiguration configuration)
         {
+            this.configuration = configuration;
         }
 
         public InteriorConstructionQuotationSystemContext(DbContextOptions<InteriorConstructionQuotationSystemContext> options)
             : base(options)
         {
+
         }
 
         public virtual DbSet<Article> Articles { get; set; } = null!;
@@ -32,22 +37,14 @@ namespace SWP391API.Models
         public virtual DbSet<Style> Styles { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(getString());
+                //remove hardcoded connection string, replace with dynamic connection string in .json file
+                optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             }
-        }
-        private string getString()
-        {
-            IConfiguration config = new ConfigurationBuilder()
-                 .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("appsettings.json", true, true)
-                        .Build();
-            var strConn = config.GetConnectionString("DefaultConnection");
-
-            return strConn;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -139,6 +136,21 @@ namespace SWP391API.Models
                 entity.Property(e => e.ProjectTitle)
                     .HasMaxLength(255)
                     .HasColumnName("project_title");
+
+                entity.Property(e => e.ProjectInformation)
+                    .HasMaxLength(4000)
+                    .HasColumnName("project_information");
+
+                entity.Property(e => e.ProjectResult)
+                    .HasMaxLength(4000)
+                    .HasColumnName("project_result");
+
+                entity.Property(e => e.Location)
+                    .HasMaxLength(255)
+                    .HasColumnName("location");
+
+                entity.Property(e => e.SurfaceArea)
+                    .HasColumnName("surface_area");
 
                 entity.Property(e => e.StartDate)
                     .HasColumnType("date")
@@ -442,6 +454,8 @@ namespace SWP391API.Models
 
             modelBuilder.Entity<User>(entity =>
             {
+
+
                 entity.ToTable("user");
 
                 entity.Property(e => e.UserId).HasColumnName("user_id");
@@ -457,6 +471,9 @@ namespace SWP391API.Models
                 entity.Property(e => e.Email)
                     .HasMaxLength(50)
                     .HasColumnName("email");
+
+                entity.HasIndex(e => e.Email, "UQ__user__AB6E6164D4A1A3A3")
+                    .IsUnique();
 
                 entity.Property(e => e.ExpireDate)
                     .HasColumnType("datetime")
@@ -478,7 +495,7 @@ namespace SWP391API.Models
 
                 entity.Property(e => e.Status)
                     .HasColumnName("status")
-                    .HasDefaultValueSql("((1))");
+                    .HasDefaultValue(false);
 
                 entity.Property(e => e.Token)
                     .HasMaxLength(3000)
@@ -487,6 +504,9 @@ namespace SWP391API.Models
                 entity.Property(e => e.Username)
                     .HasMaxLength(50)
                     .HasColumnName("username");
+
+                entity.HasIndex(e => e.Username, "UQ__user__F3DBC572D3A3E3A3")
+                    .IsUnique();
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.Users)
