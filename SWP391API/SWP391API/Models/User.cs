@@ -27,6 +27,8 @@ namespace SWP391API.Models
         public DateTime? ExpireDate { get; set; }
         public bool? Status { get; set; }
 
+        public DateTime CreatedAt { get; set; }
+
         public virtual Role Role { get; set; } = null!;
         public virtual ICollection<Article> Articles { get; set; }
         public virtual ICollection<CompletedProject> CompletedProjects { get; set; }

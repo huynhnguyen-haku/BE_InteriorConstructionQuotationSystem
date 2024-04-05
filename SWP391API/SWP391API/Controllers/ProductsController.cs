@@ -116,7 +116,7 @@ namespace SWP391API.Controllers
         public IActionResult GetListHomeStyle()
         {
             var lis = _context.HomeStyles.ToList();
-            _context.Dispose(); // Giải phóng tài nguyên
+            _context.Dispose(); // Giải phóng tài nguyênss
             return Ok(lis);
         }
 

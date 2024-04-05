@@ -42,6 +42,6 @@ namespace SWP391API.DTO
         [Required]
         [Range(1, int.MaxValue)]
         public int? CeilingConstructId { get; set; }
-        public List<QuotationDetailDTO> quotationDetailDTOs { get; set; }
+        public List<SubmitQuotationDetailDTO> quotationDetailDTOs { get; set; }
     }
 }

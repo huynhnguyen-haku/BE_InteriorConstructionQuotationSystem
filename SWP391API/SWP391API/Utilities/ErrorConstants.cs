@@ -18,5 +18,10 @@
         public static string ProductExistInProject = "Product exist in project";
         public static string ProductExistInQuotationTemps = "Product exist in quotation temps";
         public static string QuotationNotPending = "Quotation is not pending status";
+        
+        public static string ConstructionStyleNotFound = "Construction style not found";
+        public static string HomeStyleNotFound = "Home style not found";
+
+        public static string InvalidStatus = "Invalid status";
     }
 }

@@ -26,6 +26,12 @@ namespace SWP391API.DTO
 
         public List<QuotationDetailDTO> quotationDetailDTOs { get; set; }
 
+        public ConstructionStyleDTO CeilingConstruct { get; set; }
+        public ConstructionStyleDTO FloorConstruction { get; set; }
+        public ConstructionStyleDTO WallConstruct { get; set; }
+        public HomeStyleDTO HomeStyle { get; set; }
+        public StyleDTO StyleDTO { get; set; }
+
         public QuotationResponseDTO(Quotation q)
         {
             QuotationId = q.QuotationId;
@@ -46,6 +52,12 @@ namespace SWP391API.DTO
             FloorConstructionId = q.FloorConstructionId;
             WallConstructId = q.WallConstructId;
             CeilingConstructId = q.CeilingConstructId;
+
+            CeilingConstruct = new ConstructionStyleDTO(q.CeilingConstruct);
+            FloorConstruction = new ConstructionStyleDTO(q.FloorConstruction);
+            WallConstruct = new ConstructionStyleDTO(q.WallConstruct);
+            HomeStyle = new HomeStyleDTO(q.HomeStyle);
+            StyleDTO = new StyleDTO(q.Style);
 
             quotationDetailDTOs = q.QuotationDetails.Select(qd => new QuotationDetailDTO(qd)).ToList();
 

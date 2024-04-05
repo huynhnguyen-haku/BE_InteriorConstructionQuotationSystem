@@ -84,7 +84,7 @@ namespace SWP391API.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new ErrorDTO(e.Message));
+                return BadRequest(new ErrorDTO(e.Message + " " + e.StackTrace));
             }
         }
 
@@ -224,18 +224,18 @@ namespace SWP391API.Controllers
 
         [HttpPatch("Status")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> UpdateQuotationStatus(QuotationUpdateStatusDTO quotationUpdateStatusDTO)
+        public async Task<IActionResult> UpdateQuotationStatus([FromBody] QuotationUpdateStatusDTO quotationUpdateStatusDTO)
         {
             try
             {
                await _quotationService.updateQuotationStatus(quotationUpdateStatusDTO);
+
+                return Ok();
             }
             catch (Exception e)
             {
-                BadRequest(new ErrorDTO(e.Message));
+                return BadRequest(new ErrorDTO(e.Message));
             }
-
-            return Ok();
         }
 
 

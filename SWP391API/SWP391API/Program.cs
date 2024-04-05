@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using QuestPDF.Infrastructure;
 using SWP391API.Hubs;
 using SWP391API.Models;
 using SWP391API.Repositories;
@@ -8,6 +9,8 @@ using SWP391API.Services;
 using SWP391API.Services.Implements;
 using System.Text;
 using System.Text.Json.Serialization;
+
+//QuestPDF.Settings.License = LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,6 +91,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        
     };
 
     // SignalR onMessageReceived event to read the access token from the query string

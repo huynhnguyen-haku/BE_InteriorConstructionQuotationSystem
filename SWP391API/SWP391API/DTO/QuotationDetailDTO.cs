@@ -6,6 +6,7 @@ namespace SWP391API.DTO
     public class QuotationDetailDTO
     {
         public int ProductId { get; set; }
+        public ProductInQuotationDetailDTO ProductDTO { get; set; }
 
         [Required]
         [Range(1, int.MaxValue)]
@@ -17,6 +18,8 @@ namespace SWP391API.DTO
             ProductId = qd.ProductId;
             Quantity = qd.Quantity;
             Price = qd.Price;
+
+            ProductDTO = new ProductInQuotationDetailDTO(qd.Product);
         }
 
         public QuotationDetailDTO()

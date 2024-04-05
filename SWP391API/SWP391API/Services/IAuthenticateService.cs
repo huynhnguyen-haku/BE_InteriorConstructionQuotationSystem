@@ -19,5 +19,7 @@ namespace SWP391API.Services
         int getCurrentUserId();
 
         string getCurrentUsername();
+
+        string getCurrentUserRole();
     }
 }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Huynh Nguyen\\Documents\\BE_InteriorConstructionQuotationSystem\\SWP391API\\SWP391API\\SWP391API.csproj": {}
+    "C:\\Users\\Huynh Nguyen\\Desktop\\swp391api\\SWP391API\\SWP391API\\SWP391API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Huynh Nguyen\\Documents\\BE_InteriorConstructionQuotationSystem\\SWP391API\\SWP391API\\SWP391API.csproj": {
+    "C:\\Users\\Huynh Nguyen\\Desktop\\swp391api\\SWP391API\\SWP391API\\SWP391API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Huynh Nguyen\\Documents\\BE_InteriorConstructionQuotationSystem\\SWP391API\\SWP391API\\SWP391API.csproj",
+        "projectUniqueName": "C:\\Users\\Huynh Nguyen\\Desktop\\swp391api\\SWP391API\\SWP391API\\SWP391API.csproj",
         "projectName": "SWP391API",
-        "projectPath": "C:\\Users\\Huynh Nguyen\\Documents\\BE_InteriorConstructionQuotationSystem\\SWP391API\\SWP391API\\SWP391API.csproj",
+        "projectPath": "C:\\Users\\Huynh Nguyen\\Desktop\\swp391api\\SWP391API\\SWP391API\\SWP391API.csproj",
         "packagesPath": "C:\\Users\\Huynh Nguyen\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Huynh Nguyen\\Documents\\BE_InteriorConstructionQuotationSystem\\SWP391API\\SWP391API\\obj\\",
+        "outputPath": "C:\\Users\\Huynh Nguyen\\Desktop\\swp391api\\SWP391API\\SWP391API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Huynh Nguyen\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,6 +40,14 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Ardalis.Specification": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Ardalis.Specification.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[6.0.20, )"
@@ -54,6 +62,12 @@
               "target": "Package",
               "version": "[6.0.28, )"
             },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.20, )"
+            },
             "Microsoft.Extensions.Configuration.Json": {
               "target": "Package",
               "version": "[6.0.0, )"
@@ -62,13 +76,25 @@
               "target": "Package",
               "version": "[1.19.6, )"
             },
+            "QuestPDF": {
+              "target": "Package",
+              "version": "[2023.12.6, )"
+            },
+            "SkiaSharp.NativeAssets.Linux": {
+              "target": "Package",
+              "version": "[2.88.7, )"
+            },
+            "SkiaSharp.NativeAssets.Linux.NoDependencies": {
+              "target": "Package",
+              "version": "[2.88.7, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
             },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
-              "version": "[7.0.0, )"
+              "version": "[7.5.0, )"
             }
           },
           "imports": [

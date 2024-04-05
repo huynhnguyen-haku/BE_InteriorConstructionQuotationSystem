@@ -460,6 +460,11 @@ namespace SWP391API.Models
 
                 entity.Property(e => e.UserId).HasColumnName("user_id");
 
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime")
+                    .HasColumnName("created_at")
+                    .HasDefaultValueSql("(getdate())");
+
                 entity.Property(e => e.AvtUrl)
                     .HasMaxLength(255)
                     .HasColumnName("avt_url");

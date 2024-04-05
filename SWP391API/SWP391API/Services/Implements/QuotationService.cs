@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -14,15 +15,21 @@ namespace SWP391API.Services.Implements
     public class QuotationService : IQuotationService
     {
         private readonly Repository<Quotation> _quotationRepository;
+        private readonly Repository<ConstructionStyle> _constructionStyleRepository;
+        private readonly Repository<Product> _productRepository;
+        private readonly Repository<HomeStyle> _homeStyleRepository;
         private readonly INotificationService _notificationService;
 
         private readonly IEmailService _emailService;
 
-        public QuotationService(Repository<Quotation> quotationRepository, INotificationService notificationService, IEmailService emailService)
+        public QuotationService(Repository<Quotation> quotationRepository, INotificationService notificationService, IEmailService emailService, Repository<Product> productRepository, Repository<ConstructionStyle> constructionStyleRepository, Repository<HomeStyle> homeStyleRepository)
         {
             _quotationRepository = quotationRepository;
             _notificationService = notificationService;
             _emailService = emailService;
+            _productRepository = productRepository;
+            _constructionStyleRepository = constructionStyleRepository;
+            _homeStyleRepository = homeStyleRepository;
         }
 
         public async Task<QuotationResponseDTO> createQuotation(int userId, SubmitQuotationDTO req)
@@ -40,15 +47,50 @@ namespace SWP391API.Services.Implements
             quotation.Length = req.Length;
             quotation.TotalConstructionCost = req.TotalConstructionCost;
             quotation.TotalProductCost = req.TotalProductCost;
+
+
             quotation.HomeStyleId = req.HomeStyleId;
+            var homeStyle = await _homeStyleRepository.GetByIdAsync(req.HomeStyleId);
+            if (homeStyle == null)
+            {
+                throw new Exception(ErrorConstants.HomeStyleNotFound);
+            }
+
+            var floorConstructor = await _constructionStyleRepository.GetByIdAsync(req.FloorConstructionId);
+            if (floorConstructor == null)
+            {
+                throw new Exception(ErrorConstants.ConstructionStyleNotFound);
+            }
+
+            var wallConstructor = await _constructionStyleRepository.GetByIdAsync(req.WallConstructId);
+            if (wallConstructor == null)
+            {
+                throw new Exception(ErrorConstants.ConstructionStyleNotFound);
+            }
+
+            var ceilingConstructor = await _constructionStyleRepository.GetByIdAsync(req.CeilingConstructId);
+            if (ceilingConstructor == null)
+            {
+                throw new Exception(ErrorConstants.ConstructionStyleNotFound);
+            }
+
             quotation.FloorConstructionId = req.FloorConstructionId;
             quotation.WallConstructId = req.WallConstructId;
             quotation.CeilingConstructId = req.CeilingConstructId;
 
-            foreach (QuotationDetailDTO quotationDetailDTO in req.quotationDetailDTOs)
+            foreach (SubmitQuotationDetailDTO quotationDetailDTO in req.quotationDetailDTOs)
             {
                 QuotationDetail quotationDetail = new QuotationDetail();
                 quotationDetail.ProductId = quotationDetailDTO.ProductId;
+
+                var productSpec = new ProductByIdSpec(quotationDetailDTO.ProductId);
+                Product product = await _productRepository.FirstOrDefaultAsync(productSpec);
+
+                if (product == null)
+                {
+                    throw new Exception(ErrorConstants.ProductNotFound);
+                }
+
                 quotationDetail.Quantity = quotationDetailDTO.Quantity;
                 quotationDetail.Price = quotationDetailDTO.Price;
                 
@@ -94,8 +136,6 @@ namespace SWP391API.Services.Implements
             {
                 throw new Exception(ErrorConstants.QuotationNotFound);
             }
-
-            QuestPDF.Settings.License = LicenseType.Community;
 
             var pdfBytes = Document.Create(container =>
             {
@@ -316,6 +356,11 @@ namespace SWP391API.Services.Implements
             if (quotation.QuotationStatus != "Pending")
             {
                 throw new Exception(ErrorConstants.QuotationNotPending);
+            }
+
+            if (req.QuotationStatus != "Cancel" && req.QuotationStatus != "Pending" && req.QuotationStatus != "Done")
+            {
+                throw new Exception(ErrorConstants.InvalidStatus);
             }
 
             quotation.QuotationStatus = req.QuotationStatus;

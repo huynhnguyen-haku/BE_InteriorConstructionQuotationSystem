@@ -565,6 +565,12 @@ namespace SWP391API.Migrations
                         .HasColumnType("date")
                         .HasColumnName("birthdate");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("(getdate())");
+
                     b.Property<string>("Email")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")

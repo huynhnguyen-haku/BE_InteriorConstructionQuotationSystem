@@ -2,6 +2,92 @@
   "version": 3,
   "targets": {
     "net6.0": {
+      "Ardalis.Specification/8.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Ardalis.Specification.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Ardalis.Specification.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "Ardalis.Specification.EntityFrameworkCore/8.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Ardalis.Specification": "8.0.0",
+          "Microsoft.EntityFrameworkCore": "6.0.25",
+          "Microsoft.EntityFrameworkCore.Relational": "6.0.25"
+        },
+        "compile": {
+          "lib/net6.0/Ardalis.Specification.EntityFrameworkCore.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Ardalis.Specification.EntityFrameworkCore.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "HarfBuzzSharp/7.3.0.1": {
+        "type": "package",
+        "dependencies": {
+          "HarfBuzzSharp.NativeAssets.Win32": "7.3.0.1",
+          "HarfBuzzSharp.NativeAssets.macOS": "7.3.0.1"
+        },
+        "compile": {
+          "lib/net6.0/HarfBuzzSharp.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/HarfBuzzSharp.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "HarfBuzzSharp.NativeAssets.macOS/7.3.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/_._": {}
+        },
+        "runtime": {
+          "lib/net6.0/_._": {}
+        },
+        "runtimeTargets": {
+          "runtimes/osx/native/libHarfBuzzSharp.dylib": {
+            "assetType": "native",
+            "rid": "osx"
+          }
+        }
+      },
+      "HarfBuzzSharp.NativeAssets.Win32/7.3.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/_._": {}
+        },
+        "runtime": {
+          "lib/net6.0/_._": {}
+        },
+        "runtimeTargets": {
+          "runtimes/win-arm64/native/libHarfBuzzSharp.dll": {
+            "assetType": "native",
+            "rid": "win-arm64"
+          },
+          "runtimes/win-x64/native/libHarfBuzzSharp.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x86/native/libHarfBuzzSharp.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
+          }
+        }
+      },
       "Humanizer.Core/2.8.26": {
         "type": "package",
         "compile": {
@@ -189,6 +275,18 @@
           "lib/net6.0/Microsoft.EntityFrameworkCore.SqlServer.dll": {
             "related": ".xml"
           }
+        }
+      },
+      "Microsoft.EntityFrameworkCore.Tools/6.0.20": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.Design": "6.0.20"
+        },
+        "compile": {
+          "lib/net6.0/_._": {}
+        },
+        "runtime": {
+          "lib/net6.0/_._": {}
         }
       },
       "Microsoft.Extensions.ApiDescription.Server/3.0.0": {
@@ -488,7 +586,7 @@
           }
         }
       },
-      "Microsoft.IdentityModel.Abstractions/7.0.0": {
+      "Microsoft.IdentityModel.Abstractions/7.5.0": {
         "type": "package",
         "compile": {
           "lib/net6.0/Microsoft.IdentityModel.Abstractions.dll": {
@@ -501,10 +599,10 @@
           }
         }
       },
-      "Microsoft.IdentityModel.JsonWebTokens/7.0.0": {
+      "Microsoft.IdentityModel.JsonWebTokens/7.5.0": {
         "type": "package",
         "dependencies": {
-          "Microsoft.IdentityModel.Tokens": "7.0.0"
+          "Microsoft.IdentityModel.Tokens": "7.5.0"
         },
         "compile": {
           "lib/net6.0/Microsoft.IdentityModel.JsonWebTokens.dll": {
@@ -517,10 +615,10 @@
           }
         }
       },
-      "Microsoft.IdentityModel.Logging/7.0.0": {
+      "Microsoft.IdentityModel.Logging/7.5.0": {
         "type": "package",
         "dependencies": {
-          "Microsoft.IdentityModel.Abstractions": "7.0.0"
+          "Microsoft.IdentityModel.Abstractions": "7.5.0"
         },
         "compile": {
           "lib/net6.0/Microsoft.IdentityModel.Logging.dll": {
@@ -567,10 +665,10 @@
           }
         }
       },
-      "Microsoft.IdentityModel.Tokens/7.0.0": {
+      "Microsoft.IdentityModel.Tokens/7.5.0": {
         "type": "package",
         "dependencies": {
-          "Microsoft.IdentityModel.Logging": "7.0.0"
+          "Microsoft.IdentityModel.Logging": "7.5.0"
         },
         "compile": {
           "lib/net6.0/Microsoft.IdentityModel.Tokens.dll": {
@@ -658,6 +756,155 @@
           "runtimes/win/lib/netcoreapp3.0/Microsoft.Win32.SystemEvents.dll": {
             "assetType": "runtime",
             "rid": "win"
+          }
+        }
+      },
+      "QuestPDF/2023.12.6": {
+        "type": "package",
+        "dependencies": {
+          "SkiaSharp": "2.88.7",
+          "SkiaSharp.HarfBuzz": "2.88.7"
+        },
+        "compile": {
+          "lib/net6.0/QuestPDF.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/QuestPDF.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "SkiaSharp/2.88.7": {
+        "type": "package",
+        "dependencies": {
+          "SkiaSharp.NativeAssets.Win32": "2.88.7",
+          "SkiaSharp.NativeAssets.macOS": "2.88.7"
+        },
+        "compile": {
+          "lib/net6.0/SkiaSharp.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/SkiaSharp.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "SkiaSharp.HarfBuzz/2.88.7": {
+        "type": "package",
+        "dependencies": {
+          "HarfBuzzSharp": "7.3.0.1",
+          "SkiaSharp": "2.88.7"
+        },
+        "compile": {
+          "lib/net6.0/SkiaSharp.HarfBuzz.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/SkiaSharp.HarfBuzz.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "SkiaSharp.NativeAssets.Linux/2.88.7": {
+        "type": "package",
+        "dependencies": {
+          "SkiaSharp": "2.88.7"
+        },
+        "compile": {
+          "lib/net6.0/_._": {}
+        },
+        "runtime": {
+          "lib/net6.0/_._": {}
+        },
+        "runtimeTargets": {
+          "runtimes/linux-arm/native/libSkiaSharp.so": {
+            "assetType": "native",
+            "rid": "linux-arm"
+          },
+          "runtimes/linux-arm64/native/libSkiaSharp.so": {
+            "assetType": "native",
+            "rid": "linux-arm64"
+          },
+          "runtimes/linux-musl-x64/native/libSkiaSharp.so": {
+            "assetType": "native",
+            "rid": "linux-musl-x64"
+          },
+          "runtimes/linux-x64/native/libSkiaSharp.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          }
+        }
+      },
+      "SkiaSharp.NativeAssets.Linux.NoDependencies/2.88.7": {
+        "type": "package",
+        "dependencies": {
+          "SkiaSharp": "2.88.7"
+        },
+        "compile": {
+          "lib/net6.0/_._": {}
+        },
+        "runtime": {
+          "lib/net6.0/_._": {}
+        },
+        "runtimeTargets": {
+          "runtimes/linux-arm/native/libSkiaSharp.so": {
+            "assetType": "native",
+            "rid": "linux-arm"
+          },
+          "runtimes/linux-arm64/native/libSkiaSharp.so": {
+            "assetType": "native",
+            "rid": "linux-arm64"
+          },
+          "runtimes/linux-musl-x64/native/libSkiaSharp.so": {
+            "assetType": "native",
+            "rid": "linux-musl-x64"
+          },
+          "runtimes/linux-x64/native/libSkiaSharp.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          }
+        }
+      },
+      "SkiaSharp.NativeAssets.macOS/2.88.7": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/_._": {}
+        },
+        "runtime": {
+          "lib/net6.0/_._": {}
+        },
+        "runtimeTargets": {
+          "runtimes/osx/native/libSkiaSharp.dylib": {
+            "assetType": "native",
+            "rid": "osx"
+          }
+        }
+      },
+      "SkiaSharp.NativeAssets.Win32/2.88.7": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/_._": {}
+        },
+        "runtime": {
+          "lib/net6.0/_._": {}
+        },
+        "runtimeTargets": {
+          "runtimes/win-arm64/native/libSkiaSharp.dll": {
+            "assetType": "native",
+            "rid": "win-arm64"
+          },
+          "runtimes/win-x64/native/libSkiaSharp.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x86/native/libSkiaSharp.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
           }
         }
       },
@@ -804,11 +1051,11 @@
           }
         }
       },
-      "System.IdentityModel.Tokens.Jwt/7.0.0": {
+      "System.IdentityModel.Tokens.Jwt/7.5.0": {
         "type": "package",
         "dependencies": {
-          "Microsoft.IdentityModel.JsonWebTokens": "7.0.0",
-          "Microsoft.IdentityModel.Tokens": "7.0.0"
+          "Microsoft.IdentityModel.JsonWebTokens": "7.5.0",
+          "Microsoft.IdentityModel.Tokens": "7.5.0"
         },
         "compile": {
           "lib/net6.0/System.IdentityModel.Tokens.Jwt.dll": {
@@ -1033,6 +1280,169 @@
     }
   },
   "libraries": {
+    "Ardalis.Specification/8.0.0": {
+      "sha512": "1/YP932oZJtaDlm85rWfqvgOjALbk2+VDZaj36sM2TdsJMNkVqMbF5UzY6f7OfzA8eymv3hnCXIgYmEBEiUOhQ==",
+      "type": "package",
+      "path": "ardalis.specification/8.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ardalis.specification.8.0.0.nupkg.sha512",
+        "ardalis.specification.nuspec",
+        "icon.png",
+        "lib/net6.0/Ardalis.Specification.dll",
+        "lib/net6.0/Ardalis.Specification.pdb",
+        "lib/net6.0/Ardalis.Specification.xml",
+        "lib/net7.0/Ardalis.Specification.dll",
+        "lib/net7.0/Ardalis.Specification.pdb",
+        "lib/net7.0/Ardalis.Specification.xml",
+        "lib/net8.0/Ardalis.Specification.dll",
+        "lib/net8.0/Ardalis.Specification.pdb",
+        "lib/net8.0/Ardalis.Specification.xml",
+        "lib/netstandard2.0/Ardalis.Specification.dll",
+        "lib/netstandard2.0/Ardalis.Specification.pdb",
+        "lib/netstandard2.0/Ardalis.Specification.xml"
+      ]
+    },
+    "Ardalis.Specification.EntityFrameworkCore/8.0.0": {
+      "sha512": "fDaCf5/7rm7Ul7yE8YafyWhxCSmWCPd+/4BUxM26Hbnb2PKZJssjAevzx9ZceASJKe4HUndSEKXJ8iz+R3rsIw==",
+      "type": "package",
+      "path": "ardalis.specification.entityframeworkcore/8.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ardalis.specification.entityframeworkcore.8.0.0.nupkg.sha512",
+        "ardalis.specification.entityframeworkcore.nuspec",
+        "icon.png",
+        "lib/net6.0/Ardalis.Specification.EntityFrameworkCore.dll",
+        "lib/net6.0/Ardalis.Specification.EntityFrameworkCore.pdb",
+        "lib/net6.0/Ardalis.Specification.EntityFrameworkCore.xml",
+        "lib/net7.0/Ardalis.Specification.EntityFrameworkCore.dll",
+        "lib/net7.0/Ardalis.Specification.EntityFrameworkCore.pdb",
+        "lib/net7.0/Ardalis.Specification.EntityFrameworkCore.xml",
+        "lib/net8.0/Ardalis.Specification.EntityFrameworkCore.dll",
+        "lib/net8.0/Ardalis.Specification.EntityFrameworkCore.pdb",
+        "lib/net8.0/Ardalis.Specification.EntityFrameworkCore.xml"
+      ]
+    },
+    "HarfBuzzSharp/7.3.0.1": {
+      "sha512": "/6z6TQBqWWbVpLUw7E/82HZKLT3OAzg/w6z8I6JFNFcYa3nM9RnZ8XGos9nD4buAzThLHpqPw/rb8FdZXEORAQ==",
+      "type": "package",
+      "path": "harfbuzzsharp/7.3.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "THIRD-PARTY-NOTICES.txt",
+        "harfbuzzsharp.7.3.0.1.nupkg.sha512",
+        "harfbuzzsharp.nuspec",
+        "lib/monoandroid1.0/HarfBuzzSharp.dll",
+        "lib/monoandroid1.0/HarfBuzzSharp.pdb",
+        "lib/monoandroid1.0/HarfBuzzSharp.xml",
+        "lib/net462/HarfBuzzSharp.dll",
+        "lib/net462/HarfBuzzSharp.pdb",
+        "lib/net462/HarfBuzzSharp.xml",
+        "lib/net6.0-android30.0/HarfBuzzSharp.dll",
+        "lib/net6.0-android30.0/HarfBuzzSharp.pdb",
+        "lib/net6.0-android30.0/HarfBuzzSharp.xml",
+        "lib/net6.0-ios13.6/HarfBuzzSharp.dll",
+        "lib/net6.0-ios13.6/HarfBuzzSharp.pdb",
+        "lib/net6.0-ios13.6/HarfBuzzSharp.xml",
+        "lib/net6.0-maccatalyst13.5/HarfBuzzSharp.dll",
+        "lib/net6.0-maccatalyst13.5/HarfBuzzSharp.pdb",
+        "lib/net6.0-maccatalyst13.5/HarfBuzzSharp.xml",
+        "lib/net6.0-macos10.15/HarfBuzzSharp.dll",
+        "lib/net6.0-macos10.15/HarfBuzzSharp.pdb",
+        "lib/net6.0-macos10.15/HarfBuzzSharp.xml",
+        "lib/net6.0-tvos13.4/HarfBuzzSharp.dll",
+        "lib/net6.0-tvos13.4/HarfBuzzSharp.pdb",
+        "lib/net6.0-tvos13.4/HarfBuzzSharp.xml",
+        "lib/net6.0/HarfBuzzSharp.dll",
+        "lib/net6.0/HarfBuzzSharp.pdb",
+        "lib/net6.0/HarfBuzzSharp.xml",
+        "lib/netcoreapp3.1/HarfBuzzSharp.dll",
+        "lib/netcoreapp3.1/HarfBuzzSharp.pdb",
+        "lib/netcoreapp3.1/HarfBuzzSharp.xml",
+        "lib/netstandard1.3/HarfBuzzSharp.dll",
+        "lib/netstandard1.3/HarfBuzzSharp.pdb",
+        "lib/netstandard1.3/HarfBuzzSharp.xml",
+        "lib/netstandard2.0/HarfBuzzSharp.dll",
+        "lib/netstandard2.0/HarfBuzzSharp.pdb",
+        "lib/netstandard2.0/HarfBuzzSharp.xml",
+        "lib/netstandard2.1/HarfBuzzSharp.dll",
+        "lib/netstandard2.1/HarfBuzzSharp.pdb",
+        "lib/netstandard2.1/HarfBuzzSharp.xml",
+        "lib/tizen40/HarfBuzzSharp.dll",
+        "lib/tizen40/HarfBuzzSharp.pdb",
+        "lib/tizen40/HarfBuzzSharp.xml",
+        "lib/uap10.0.10240/HarfBuzzSharp.dll",
+        "lib/uap10.0.10240/HarfBuzzSharp.pdb",
+        "lib/uap10.0.10240/HarfBuzzSharp.xml",
+        "lib/uap10.0.16299/HarfBuzzSharp.dll",
+        "lib/uap10.0.16299/HarfBuzzSharp.pdb",
+        "lib/uap10.0.16299/HarfBuzzSharp.xml",
+        "lib/xamarinios1.0/HarfBuzzSharp.dll",
+        "lib/xamarinios1.0/HarfBuzzSharp.pdb",
+        "lib/xamarinios1.0/HarfBuzzSharp.xml",
+        "lib/xamarinmac2.0/HarfBuzzSharp.dll",
+        "lib/xamarinmac2.0/HarfBuzzSharp.pdb",
+        "lib/xamarinmac2.0/HarfBuzzSharp.xml",
+        "lib/xamarintvos1.0/HarfBuzzSharp.dll",
+        "lib/xamarintvos1.0/HarfBuzzSharp.pdb",
+        "lib/xamarintvos1.0/HarfBuzzSharp.xml",
+        "lib/xamarinwatchos1.0/HarfBuzzSharp.dll",
+        "lib/xamarinwatchos1.0/HarfBuzzSharp.pdb",
+        "lib/xamarinwatchos1.0/HarfBuzzSharp.xml"
+      ]
+    },
+    "HarfBuzzSharp.NativeAssets.macOS/7.3.0.1": {
+      "sha512": "4i6e8WhXF04At1rZ904xjt5g10W86u6B2SpzWAw+cfY4mzfyUV0hgZHIWsE6PsW8a9bP/bSdsZx/Rt4UIroi4w==",
+      "type": "package",
+      "path": "harfbuzzsharp.nativeassets.macos/7.3.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "THIRD-PARTY-NOTICES.txt",
+        "build/net462/HarfBuzzSharp.NativeAssets.macOS.targets",
+        "build/net6.0-macos10.15/HarfBuzzSharp.NativeAssets.macOS.targets",
+        "build/xamarinmac2.0/HarfBuzzSharp.NativeAssets.macOS.targets",
+        "buildTransitive/net462/HarfBuzzSharp.NativeAssets.macOS.targets",
+        "buildTransitive/net6.0-macos10.15/HarfBuzzSharp.NativeAssets.macOS.targets",
+        "buildTransitive/xamarinmac2.0/HarfBuzzSharp.NativeAssets.macOS.targets",
+        "harfbuzzsharp.nativeassets.macos.7.3.0.1.nupkg.sha512",
+        "harfbuzzsharp.nativeassets.macos.nuspec",
+        "lib/net462/_._",
+        "lib/net6.0-macos10.15/_._",
+        "lib/net6.0/_._",
+        "lib/netcoreapp3.1/_._",
+        "lib/netstandard1.3/_._",
+        "lib/xamarinmac2.0/_._",
+        "runtimes/osx/native/libHarfBuzzSharp.dylib"
+      ]
+    },
+    "HarfBuzzSharp.NativeAssets.Win32/7.3.0.1": {
+      "sha512": "NxzjhGcY7fYCu51BsanQurXXyqGogZiMzFBpDrZg49jNhT/S0QWYe/uvmP9YbwagprKQ+2tbGT0cw1BvxJciXQ==",
+      "type": "package",
+      "path": "harfbuzzsharp.nativeassets.win32/7.3.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "THIRD-PARTY-NOTICES.txt",
+        "build/net462/HarfBuzzSharp.NativeAssets.Win32.targets",
+        "buildTransitive/net462/HarfBuzzSharp.NativeAssets.Win32.targets",
+        "harfbuzzsharp.nativeassets.win32.7.3.0.1.nupkg.sha512",
+        "harfbuzzsharp.nativeassets.win32.nuspec",
+        "lib/net462/_._",
+        "lib/net6.0/_._",
+        "lib/netcoreapp3.1/_._",
+        "lib/netstandard1.3/_._",
+        "runtimes/win-arm64/native/libHarfBuzzSharp.dll",
+        "runtimes/win-x64/native/libHarfBuzzSharp.dll",
+        "runtimes/win-x86/native/libHarfBuzzSharp.dll"
+      ]
+    },
     "Humanizer.Core/2.8.26": {
       "sha512": "OiKusGL20vby4uDEswj2IgkdchC1yQ6rwbIkZDVBPIR6al2b7n3pC91elBul9q33KaBgRKhbZH3+2Ur4fnWx2A==",
       "type": "package",
@@ -1235,6 +1645,31 @@
         "lib/net6.0/Microsoft.EntityFrameworkCore.SqlServer.xml",
         "microsoft.entityframeworkcore.sqlserver.6.0.28.nupkg.sha512",
         "microsoft.entityframeworkcore.sqlserver.nuspec"
+      ]
+    },
+    "Microsoft.EntityFrameworkCore.Tools/6.0.20": {
+      "sha512": "xVoW+KIMXC/LTTkM1SG3Cqu3cqJn60vjAmTueEDB6dyZsykTVX09r7e5ggVc638vc18Cs07pjmIg2BPwhuRcLg==",
+      "type": "package",
+      "path": "microsoft.entityframeworkcore.tools/6.0.20",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "lib/net6.0/_._",
+        "microsoft.entityframeworkcore.tools.6.0.20.nupkg.sha512",
+        "microsoft.entityframeworkcore.tools.nuspec",
+        "tools/EntityFrameworkCore.PS2.psd1",
+        "tools/EntityFrameworkCore.PS2.psm1",
+        "tools/EntityFrameworkCore.psd1",
+        "tools/EntityFrameworkCore.psm1",
+        "tools/about_EntityFrameworkCore.help.txt",
+        "tools/init.ps1",
+        "tools/net461/any/ef.exe",
+        "tools/net461/win-arm64/ef.exe",
+        "tools/net461/win-x86/ef.exe",
+        "tools/netcoreapp2.0/any/ef.dll",
+        "tools/netcoreapp2.0/any/ef.runtimeconfig.json"
       ]
     },
     "Microsoft.Extensions.ApiDescription.Server/3.0.0": {
@@ -1666,10 +2101,10 @@
         "ref/xamarinmac20/Microsoft.Identity.Client.xml"
       ]
     },
-    "Microsoft.IdentityModel.Abstractions/7.0.0": {
-      "sha512": "7iSWSRR72VKeonFdfDi43Lvkca98Y0F3TmmWhRSuHbkjk/IKUSO0Qd272LQFZpi5eDNQNbUXy3o4THXhOAU6cw==",
+    "Microsoft.IdentityModel.Abstractions/7.5.0": {
+      "sha512": "seOFPaBQh2K683eFujAuDsrO2XbOA+SvxRli+wu7kl+ZymuGQzjmmUKfyFHmDazpPOBnmOX1ZnjX7zFDZHyNIA==",
       "type": "package",
-      "path": "microsoft.identitymodel.abstractions/7.0.0",
+      "path": "microsoft.identitymodel.abstractions/7.5.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1685,14 +2120,14 @@
         "lib/net8.0/Microsoft.IdentityModel.Abstractions.xml",
         "lib/netstandard2.0/Microsoft.IdentityModel.Abstractions.dll",
         "lib/netstandard2.0/Microsoft.IdentityModel.Abstractions.xml",
-        "microsoft.identitymodel.abstractions.7.0.0.nupkg.sha512",
+        "microsoft.identitymodel.abstractions.7.5.0.nupkg.sha512",
         "microsoft.identitymodel.abstractions.nuspec"
       ]
     },
-    "Microsoft.IdentityModel.JsonWebTokens/7.0.0": {
-      "sha512": "N+hUPsFZs+IhlMU+qmX8NnYVB9uMxVdcWoPIhKo4oHDR/yuIFh19SVZeFby15cm8S9yedynOcfs7TU5oDCheZw==",
+    "Microsoft.IdentityModel.JsonWebTokens/7.5.0": {
+      "sha512": "mfyiGptbcH+oYrzAtWWwuV+7MoM0G0si+9owaj6DGWInhq/N/KDj/pWHhq1ShdmBu332gjP+cppjgwBpsOj7Fg==",
       "type": "package",
-      "path": "microsoft.identitymodel.jsonwebtokens/7.0.0",
+      "path": "microsoft.identitymodel.jsonwebtokens/7.5.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1708,14 +2143,14 @@
         "lib/net8.0/Microsoft.IdentityModel.JsonWebTokens.xml",
         "lib/netstandard2.0/Microsoft.IdentityModel.JsonWebTokens.dll",
         "lib/netstandard2.0/Microsoft.IdentityModel.JsonWebTokens.xml",
-        "microsoft.identitymodel.jsonwebtokens.7.0.0.nupkg.sha512",
+        "microsoft.identitymodel.jsonwebtokens.7.5.0.nupkg.sha512",
         "microsoft.identitymodel.jsonwebtokens.nuspec"
       ]
     },
-    "Microsoft.IdentityModel.Logging/7.0.0": {
-      "sha512": "6I35Kt2/PQZAyUYLo3+QgT/LubZ5/4Ojelkbyo8KKdDgjMbVocAx2B3P5V7iMCz+rsAe/RLr6ql87QKnHtI+aw==",
+    "Microsoft.IdentityModel.Logging/7.5.0": {
+      "sha512": "3BInZEajJvnTDP/YRrmJ3Fyw8XAWWR9jG+3FkhhzRJJYItVL+BEH9qlgxSmtrxp7S7N6TOv+Y+X8BG61viiehQ==",
       "type": "package",
-      "path": "microsoft.identitymodel.logging/7.0.0",
+      "path": "microsoft.identitymodel.logging/7.5.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1731,7 +2166,7 @@
         "lib/net8.0/Microsoft.IdentityModel.Logging.xml",
         "lib/netstandard2.0/Microsoft.IdentityModel.Logging.dll",
         "lib/netstandard2.0/Microsoft.IdentityModel.Logging.xml",
-        "microsoft.identitymodel.logging.7.0.0.nupkg.sha512",
+        "microsoft.identitymodel.logging.7.5.0.nupkg.sha512",
         "microsoft.identitymodel.logging.nuspec"
       ]
     },
@@ -1773,10 +2208,10 @@
         "microsoft.identitymodel.protocols.openidconnect.nuspec"
       ]
     },
-    "Microsoft.IdentityModel.Tokens/7.0.0": {
-      "sha512": "dxYqmmFLsjBQZ6F6a4XDzrZ1CTxBRFVigJvWiNtXiIsT6UlYMxs9ONMaGx9XKzcxmcgEQ2ADuCqKZduz0LR9Hw==",
+    "Microsoft.IdentityModel.Tokens/7.5.0": {
+      "sha512": "owe33wqe0ZbwBxM3D90I0XotxNyTdl85jud03d+OrUOJNnTiqnYePwBk3WU9yW0Rk5CYX+sfSim7frmu6jeEzQ==",
       "type": "package",
-      "path": "microsoft.identitymodel.tokens/7.0.0",
+      "path": "microsoft.identitymodel.tokens/7.5.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1792,7 +2227,7 @@
         "lib/net8.0/Microsoft.IdentityModel.Tokens.xml",
         "lib/netstandard2.0/Microsoft.IdentityModel.Tokens.dll",
         "lib/netstandard2.0/Microsoft.IdentityModel.Tokens.xml",
-        "microsoft.identitymodel.tokens.7.0.0.nupkg.sha512",
+        "microsoft.identitymodel.tokens.7.5.0.nupkg.sha512",
         "microsoft.identitymodel.tokens.nuspec"
       ]
     },
@@ -1987,6 +2422,224 @@
         "version.txt"
       ]
     },
+    "QuestPDF/2023.12.6": {
+      "sha512": "6WYu+g7Q+q8ZKnoqpu7BhVUdoS8n2TD7tqpbm3ZCczDhk+SuatI3rwIuJKTrADI1kSMrrkOCVvr9nrWd3jyZXw==",
+      "type": "package",
+      "path": "questpdf/2023.12.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Logo.png",
+        "PackageLicense.md",
+        "PackageReadme.md",
+        "lib/net6.0/QuestPDF.dll",
+        "lib/net6.0/QuestPDF.xml",
+        "lib/net8.0/QuestPDF.dll",
+        "lib/net8.0/QuestPDF.xml",
+        "lib/netstandard2.0/QuestPDF.dll",
+        "lib/netstandard2.0/QuestPDF.xml",
+        "questpdf.2023.12.6.nupkg.sha512",
+        "questpdf.nuspec"
+      ]
+    },
+    "SkiaSharp/2.88.7": {
+      "sha512": "LJHAMrbWO00J7jXWLWehyjqFo29T4VzABimfJb4nICqpEe3c/KvQGWL4ItON8ymzhxYOeFgyxeRzuNzO4GHSug==",
+      "type": "package",
+      "path": "skiasharp/2.88.7",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "THIRD-PARTY-NOTICES.txt",
+        "interactive-extensions/dotnet/SkiaSharp.DotNet.Interactive.dll",
+        "lib/monoandroid1.0/SkiaSharp.dll",
+        "lib/monoandroid1.0/SkiaSharp.pdb",
+        "lib/monoandroid1.0/SkiaSharp.xml",
+        "lib/net462/SkiaSharp.dll",
+        "lib/net462/SkiaSharp.pdb",
+        "lib/net462/SkiaSharp.xml",
+        "lib/net6.0-android30.0/SkiaSharp.dll",
+        "lib/net6.0-android30.0/SkiaSharp.pdb",
+        "lib/net6.0-android30.0/SkiaSharp.xml",
+        "lib/net6.0-ios13.6/SkiaSharp.dll",
+        "lib/net6.0-ios13.6/SkiaSharp.pdb",
+        "lib/net6.0-ios13.6/SkiaSharp.xml",
+        "lib/net6.0-maccatalyst13.5/SkiaSharp.dll",
+        "lib/net6.0-maccatalyst13.5/SkiaSharp.pdb",
+        "lib/net6.0-maccatalyst13.5/SkiaSharp.xml",
+        "lib/net6.0-macos10.15/SkiaSharp.dll",
+        "lib/net6.0-macos10.15/SkiaSharp.pdb",
+        "lib/net6.0-macos10.15/SkiaSharp.xml",
+        "lib/net6.0-tizen7.0/SkiaSharp.dll",
+        "lib/net6.0-tizen7.0/SkiaSharp.pdb",
+        "lib/net6.0-tizen7.0/SkiaSharp.xml",
+        "lib/net6.0-tvos13.4/SkiaSharp.dll",
+        "lib/net6.0-tvos13.4/SkiaSharp.pdb",
+        "lib/net6.0-tvos13.4/SkiaSharp.xml",
+        "lib/net6.0/SkiaSharp.dll",
+        "lib/net6.0/SkiaSharp.pdb",
+        "lib/net6.0/SkiaSharp.xml",
+        "lib/netcoreapp3.1/SkiaSharp.dll",
+        "lib/netcoreapp3.1/SkiaSharp.pdb",
+        "lib/netcoreapp3.1/SkiaSharp.xml",
+        "lib/netstandard1.3/SkiaSharp.dll",
+        "lib/netstandard1.3/SkiaSharp.pdb",
+        "lib/netstandard1.3/SkiaSharp.xml",
+        "lib/netstandard2.0/SkiaSharp.dll",
+        "lib/netstandard2.0/SkiaSharp.pdb",
+        "lib/netstandard2.0/SkiaSharp.xml",
+        "lib/netstandard2.1/SkiaSharp.dll",
+        "lib/netstandard2.1/SkiaSharp.pdb",
+        "lib/netstandard2.1/SkiaSharp.xml",
+        "lib/tizen40/SkiaSharp.dll",
+        "lib/tizen40/SkiaSharp.pdb",
+        "lib/tizen40/SkiaSharp.xml",
+        "lib/uap10.0.10240/SkiaSharp.dll",
+        "lib/uap10.0.10240/SkiaSharp.pdb",
+        "lib/uap10.0.10240/SkiaSharp.xml",
+        "lib/uap10.0.16299/SkiaSharp.dll",
+        "lib/uap10.0.16299/SkiaSharp.pdb",
+        "lib/uap10.0.16299/SkiaSharp.xml",
+        "lib/xamarinios1.0/SkiaSharp.dll",
+        "lib/xamarinios1.0/SkiaSharp.pdb",
+        "lib/xamarinios1.0/SkiaSharp.xml",
+        "lib/xamarinmac2.0/SkiaSharp.dll",
+        "lib/xamarinmac2.0/SkiaSharp.pdb",
+        "lib/xamarinmac2.0/SkiaSharp.xml",
+        "lib/xamarintvos1.0/SkiaSharp.dll",
+        "lib/xamarintvos1.0/SkiaSharp.pdb",
+        "lib/xamarintvos1.0/SkiaSharp.xml",
+        "lib/xamarinwatchos1.0/SkiaSharp.dll",
+        "lib/xamarinwatchos1.0/SkiaSharp.pdb",
+        "lib/xamarinwatchos1.0/SkiaSharp.xml",
+        "skiasharp.2.88.7.nupkg.sha512",
+        "skiasharp.nuspec"
+      ]
+    },
+    "SkiaSharp.HarfBuzz/2.88.7": {
+      "sha512": "4Vd+GpokorZNpDvUp09zjK6CMXN35zyJtNvzkGtS1TsXlG/5yA3lWTsQIU0nSQjfgpYql0tSEU5+WTsjxljugg==",
+      "type": "package",
+      "path": "skiasharp.harfbuzz/2.88.7",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "lib/net462/SkiaSharp.HarfBuzz.dll",
+        "lib/net462/SkiaSharp.HarfBuzz.pdb",
+        "lib/net462/SkiaSharp.HarfBuzz.xml",
+        "lib/net6.0/SkiaSharp.HarfBuzz.dll",
+        "lib/net6.0/SkiaSharp.HarfBuzz.pdb",
+        "lib/net6.0/SkiaSharp.HarfBuzz.xml",
+        "lib/netcoreapp3.1/SkiaSharp.HarfBuzz.dll",
+        "lib/netcoreapp3.1/SkiaSharp.HarfBuzz.pdb",
+        "lib/netcoreapp3.1/SkiaSharp.HarfBuzz.xml",
+        "lib/netstandard1.3/SkiaSharp.HarfBuzz.dll",
+        "lib/netstandard1.3/SkiaSharp.HarfBuzz.pdb",
+        "lib/netstandard1.3/SkiaSharp.HarfBuzz.xml",
+        "lib/netstandard2.0/SkiaSharp.HarfBuzz.dll",
+        "lib/netstandard2.0/SkiaSharp.HarfBuzz.pdb",
+        "lib/netstandard2.0/SkiaSharp.HarfBuzz.xml",
+        "lib/netstandard2.1/SkiaSharp.HarfBuzz.dll",
+        "lib/netstandard2.1/SkiaSharp.HarfBuzz.pdb",
+        "lib/netstandard2.1/SkiaSharp.HarfBuzz.xml",
+        "skiasharp.harfbuzz.2.88.7.nupkg.sha512",
+        "skiasharp.harfbuzz.nuspec"
+      ]
+    },
+    "SkiaSharp.NativeAssets.Linux/2.88.7": {
+      "sha512": "i9VitS7/5D8Te3B1Gu7F6kakW9PYVnI3YC6MoR6NidreD9hDl1EIOQEBaa0eBsOsWNX5Bz92OVf6+7KbDrJvyg==",
+      "type": "package",
+      "path": "skiasharp.nativeassets.linux/2.88.7",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "THIRD-PARTY-NOTICES.txt",
+        "build/net462/SkiaSharp.NativeAssets.Linux.targets",
+        "buildTransitive/net462/SkiaSharp.NativeAssets.Linux.targets",
+        "lib/net462/_._",
+        "lib/net6.0/_._",
+        "lib/netcoreapp3.1/_._",
+        "lib/netstandard1.3/_._",
+        "runtimes/linux-arm/native/libSkiaSharp.so",
+        "runtimes/linux-arm64/native/libSkiaSharp.so",
+        "runtimes/linux-musl-x64/native/libSkiaSharp.so",
+        "runtimes/linux-x64/native/libSkiaSharp.so",
+        "skiasharp.nativeassets.linux.2.88.7.nupkg.sha512",
+        "skiasharp.nativeassets.linux.nuspec"
+      ]
+    },
+    "SkiaSharp.NativeAssets.Linux.NoDependencies/2.88.7": {
+      "sha512": "KkMftfAz1lGPnuhyecuLJzeyvMjXtHp9cYVQc/oeLhF8KYrxtUxRy5LOX5oROhyLHy/CyqEl9MoAhqmSH7cV7g==",
+      "type": "package",
+      "path": "skiasharp.nativeassets.linux.nodependencies/2.88.7",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "THIRD-PARTY-NOTICES.txt",
+        "build/net462/SkiaSharp.NativeAssets.Linux.NoDependencies.targets",
+        "buildTransitive/net462/SkiaSharp.NativeAssets.Linux.NoDependencies.targets",
+        "lib/net462/_._",
+        "lib/net6.0/_._",
+        "lib/netcoreapp3.1/_._",
+        "lib/netstandard1.3/_._",
+        "runtimes/linux-arm/native/libSkiaSharp.so",
+        "runtimes/linux-arm64/native/libSkiaSharp.so",
+        "runtimes/linux-musl-x64/native/libSkiaSharp.so",
+        "runtimes/linux-x64/native/libSkiaSharp.so",
+        "skiasharp.nativeassets.linux.nodependencies.2.88.7.nupkg.sha512",
+        "skiasharp.nativeassets.linux.nodependencies.nuspec"
+      ]
+    },
+    "SkiaSharp.NativeAssets.macOS/2.88.7": {
+      "sha512": "3jNzco4VjcYPFNxR9aNWcgweFXbTSdM1VpNRzCS4X0i1A1OuNqcaulrAvmntNpujeWxHo9e6WGh6FN8Jf5+XhA==",
+      "type": "package",
+      "path": "skiasharp.nativeassets.macos/2.88.7",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "THIRD-PARTY-NOTICES.txt",
+        "build/net462/SkiaSharp.NativeAssets.macOS.targets",
+        "build/net6.0-macos10.15/SkiaSharp.NativeAssets.macOS.targets",
+        "build/xamarinmac2.0/SkiaSharp.NativeAssets.macOS.targets",
+        "buildTransitive/net462/SkiaSharp.NativeAssets.macOS.targets",
+        "buildTransitive/net6.0-macos10.15/SkiaSharp.NativeAssets.macOS.targets",
+        "buildTransitive/xamarinmac2.0/SkiaSharp.NativeAssets.macOS.targets",
+        "lib/net462/_._",
+        "lib/net6.0-macos10.15/_._",
+        "lib/net6.0/_._",
+        "lib/netcoreapp3.1/_._",
+        "lib/netstandard1.3/_._",
+        "lib/xamarinmac2.0/_._",
+        "runtimes/osx/native/libSkiaSharp.dylib",
+        "skiasharp.nativeassets.macos.2.88.7.nupkg.sha512",
+        "skiasharp.nativeassets.macos.nuspec"
+      ]
+    },
+    "SkiaSharp.NativeAssets.Win32/2.88.7": {
+      "sha512": "BCXmWdQ0oVck9vRwC8U3ocSaTHEx28VB+6qw9OxGIMQ86iO5bp4Flqk3IXH0l9Pbr7vWAUOpI212iaL9mTaUZQ==",
+      "type": "package",
+      "path": "skiasharp.nativeassets.win32/2.88.7",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "THIRD-PARTY-NOTICES.txt",
+        "build/net462/SkiaSharp.NativeAssets.Win32.targets",
+        "buildTransitive/net462/SkiaSharp.NativeAssets.Win32.targets",
+        "lib/net462/_._",
+        "lib/net6.0/_._",
+        "lib/netcoreapp3.1/_._",
+        "lib/netstandard1.3/_._",
+        "runtimes/win-arm64/native/libSkiaSharp.dll",
+        "runtimes/win-x64/native/libSkiaSharp.dll",
+        "runtimes/win-x86/native/libSkiaSharp.dll",
+        "skiasharp.nativeassets.win32.2.88.7.nupkg.sha512",
+        "skiasharp.nativeassets.win32.nuspec"
+      ]
+    },
     "Swashbuckle.AspNetCore/6.2.3": {
       "sha512": "cnzQDn0Le+hInsw2SYwlOhOCPXpYi/szcvnyqZJ12v+QyrLBwAmWXBg6RIyHB18s/mLeywC+Rg2O9ndz0IUNYQ==",
       "type": "package",
@@ -2178,10 +2831,10 @@
         "version.txt"
       ]
     },
-    "System.IdentityModel.Tokens.Jwt/7.0.0": {
-      "sha512": "3OpN2iJf8lxpzVeFeeZSLtR3co6uKBs3VudS3PkkgdX5WF9fqqdhRMYf7WbkxqWQP/9RpoFbD3RimhfJe3hlQQ==",
+    "System.IdentityModel.Tokens.Jwt/7.5.0": {
+      "sha512": "D0TtrWOfoPdyYSlvOGaU9F1QR+qrbgJ/4eiEsQkIz7YQKIKkGXQldXukn6cYG9OahSq5UVMvyAIObECpH6Wglg==",
       "type": "package",
-      "path": "system.identitymodel.tokens.jwt/7.0.0",
+      "path": "system.identitymodel.tokens.jwt/7.5.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2197,7 +2850,7 @@
         "lib/net8.0/System.IdentityModel.Tokens.Jwt.xml",
         "lib/netstandard2.0/System.IdentityModel.Tokens.Jwt.dll",
         "lib/netstandard2.0/System.IdentityModel.Tokens.Jwt.xml",
-        "system.identitymodel.tokens.jwt.7.0.0.nupkg.sha512",
+        "system.identitymodel.tokens.jwt.7.5.0.nupkg.sha512",
         "system.identitymodel.tokens.jwt.nuspec"
       ]
     },
@@ -2579,13 +3232,19 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "Ardalis.Specification >= 8.0.0",
+      "Ardalis.Specification.EntityFrameworkCore >= 8.0.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 6.0.20",
       "Microsoft.EntityFrameworkCore.Design >= 6.0.20",
       "Microsoft.EntityFrameworkCore.SqlServer >= 6.0.28",
+      "Microsoft.EntityFrameworkCore.Tools >= 6.0.20",
       "Microsoft.Extensions.Configuration.Json >= 6.0.0",
       "Microsoft.VisualStudio.Azure.Containers.Tools.Targets >= 1.19.6",
+      "QuestPDF >= 2023.12.6",
+      "SkiaSharp.NativeAssets.Linux >= 2.88.7",
+      "SkiaSharp.NativeAssets.Linux.NoDependencies >= 2.88.7",
       "Swashbuckle.AspNetCore >= 6.2.3",
-      "System.IdentityModel.Tokens.Jwt >= 7.0.0"
+      "System.IdentityModel.Tokens.Jwt >= 7.5.0"
     ]
   },
   "packageFolders": {
@@ -2594,11 +3253,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Huynh Nguyen\\Documents\\BE_InteriorConstructionQuotationSystem\\SWP391API\\SWP391API\\SWP391API.csproj",
+      "projectUniqueName": "C:\\Users\\Huynh Nguyen\\Desktop\\swp391api\\SWP391API\\SWP391API\\SWP391API.csproj",
       "projectName": "SWP391API",
-      "projectPath": "C:\\Users\\Huynh Nguyen\\Documents\\BE_InteriorConstructionQuotationSystem\\SWP391API\\SWP391API\\SWP391API.csproj",
+      "projectPath": "C:\\Users\\Huynh Nguyen\\Desktop\\swp391api\\SWP391API\\SWP391API\\SWP391API.csproj",
       "packagesPath": "C:\\Users\\Huynh Nguyen\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Huynh Nguyen\\Documents\\BE_InteriorConstructionQuotationSystem\\SWP391API\\SWP391API\\obj\\",
+      "outputPath": "C:\\Users\\Huynh Nguyen\\Desktop\\swp391api\\SWP391API\\SWP391API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Huynh Nguyen\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -2627,6 +3286,14 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
+          "Ardalis.Specification": {
+            "target": "Package",
+            "version": "[8.0.0, )"
+          },
+          "Ardalis.Specification.EntityFrameworkCore": {
+            "target": "Package",
+            "version": "[8.0.0, )"
+          },
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
             "target": "Package",
             "version": "[6.0.20, )"
@@ -2641,6 +3308,12 @@
             "target": "Package",
             "version": "[6.0.28, )"
           },
+          "Microsoft.EntityFrameworkCore.Tools": {
+            "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+            "suppressParent": "All",
+            "target": "Package",
+            "version": "[6.0.20, )"
+          },
           "Microsoft.Extensions.Configuration.Json": {
             "target": "Package",
             "version": "[6.0.0, )"
@@ -2649,13 +3322,25 @@
             "target": "Package",
             "version": "[1.19.6, )"
           },
+          "QuestPDF": {
+            "target": "Package",
+            "version": "[2023.12.6, )"
+          },
+          "SkiaSharp.NativeAssets.Linux": {
+            "target": "Package",
+            "version": "[2.88.7, )"
+          },
+          "SkiaSharp.NativeAssets.Linux.NoDependencies": {
+            "target": "Package",
+            "version": "[2.88.7, )"
+          },
           "Swashbuckle.AspNetCore": {
             "target": "Package",
             "version": "[6.2.3, )"
           },
           "System.IdentityModel.Tokens.Jwt": {
             "target": "Package",
-            "version": "[7.0.0, )"
+            "version": "[7.5.0, )"
           }
         },
         "imports": [
@@ -2680,27 +3365,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1902",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'System.IdentityModel.Tokens.Jwt' 7.0.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-59j7-ghrg-fj52",
-      "libraryId": "System.IdentityModel.Tokens.Jwt",
-      "targetGraphs": [
-        "net6.0"
-      ]
-    },
-    {
-      "code": "NU1902",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'System.IdentityModel.Tokens.Jwt' 7.0.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-8g9c-28fc-mcx2",
-      "libraryId": "System.IdentityModel.Tokens.Jwt",
-      "targetGraphs": [
-        "net6.0"
-      ]
-    }
-  ]
+  }
 }

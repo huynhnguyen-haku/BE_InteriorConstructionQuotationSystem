@@ -9,8 +9,14 @@ namespace SWP391API.Specifications
         public QuotationByUserIdSpec(int userId, QuotationFilterDTO quotationFilterDTO)
         {
             Query
+                .Include(q => q.CeilingConstruct)
+                .Include(q => q.FloorConstruction)
+                .Include(q => q.HomeStyle)
+                .Include(q => q.Style)
+                .Include(q => q.WallConstruct)
                 .Include(q => q.User)
                 .Include(q => q.QuotationDetails)
+                    .ThenInclude(qd => qd.Product)
                 .Where(q => q.UserId == userId)
                 .Search(q => q.User.Fullname,
                 "%" + quotationFilterDTO.FullnameContains + "%", quotationFilterDTO.FullnameContains != null)

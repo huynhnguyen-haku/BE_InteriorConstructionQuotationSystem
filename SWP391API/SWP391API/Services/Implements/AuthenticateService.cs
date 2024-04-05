@@ -86,7 +86,7 @@ namespace SWP391API.Services.Implements
                 issuer: _configuration.GetSection("Jwt")["Issuer"],
                 audience: _configuration.GetSection("Jwt")["Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.Now.AddDays(100),
                 signingCredentials: creds
                 );
 
@@ -222,6 +222,11 @@ namespace SWP391API.Services.Implements
         public string getCurrentUsername()
         {
             return _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        }
+
+        public string getCurrentUserRole()
+        {
+            return _httpContextAccessor.HttpContext.User.FindFirst("Role").Value;
         }
     }
 }
